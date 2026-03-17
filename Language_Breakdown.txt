@@ -1,0 +1,74 @@
+AquaSense Project - Language & File Type Breakdown
+
+=== C++ (Arduino .ino) ===
+Aquasense-X/FLOW_CHECK/FLOW_CHECK.ino
+Aquasense-X/TRIAL1/TRIAL1.ino
+Aquasense-X/WITHOUT_BLYNK/WITHOUT_BLYNK.ino
+Aquasense-X/sketch_mar10a/sketch_mar10a.ino
+Aquasense-X/sketch_mar10a/sketch_mar10a/sketch_mar10a.ino
+
+=== TypeScript / TSX ===
+dashboard/next.config.ts
+dashboard/src/app/api/dashboard-stats/route.ts
+dashboard/src/app/api/sensor-data/route.ts
+dashboard/src/app/api/valve-control/route.ts
+dashboard/src/app/layout.tsx
+dashboard/src/app/page.tsx
+dashboard/src/components/Dashboard.tsx
+dashboard/src/lib/db.ts
+
+=== JavaScript / MJS ===
+dashboard/eslint.config.mjs
+dashboard/postcss.config.mjs
+dashboard/simulator.js
+dashboard/test.js
+
+=== CSS ===
+dashboard/src/app/globals.css
+
+=== JSON / Config ===
+dashboard/package-lock.json
+dashboard/package.json
+dashboard/tsconfig.json
+
+=== Markdown ===
+dashboard/README.md
+
+=== Database ===
+dashboard/aquasense.sqlite
+
+=== 3D Models / Object Files ===
+Aquasense-X/AQUASENSE-X.glb
+Aquasense-X/Brilliant Kieran-Trug.stl
+Aquasense-X/Brilliant Kieran-Trug/tinker.obj
+Aquasense-X/Brilliant Kieran-Trug/obj.mtl
+Aquasense-X/Powerful Wluff-Gogo (1).stl
+
+=== Documents (.pdf, .docx) ===
+AquaSense_abstract_p  (1).pdf
+Aquasense-X/3DPDF.pdf
+Aquasense-X/Documentation/ABSTRACT.pdf
+Aquasense-X/Documentation/Aquasense-X abstract.docx
+Aquasense-X/Documentation/Report on Water Availability and Management at Ichalkaranji Water Treatment Plant.docx
+Aquasense-X/Documentation/Readme to whomsoever.pdf
+Aquasense-X/Documentation/whomsoever.docx
+Aquasense-X/SCHEMATICS.pdf
+Aquasense-X/WTR 3DPDF.pdf
+Aquasense-X/report.pdf
+
+=== Images & Graphics (.png, .svg) ===
+Aquasense-X/Documentation/Reservoir Storage Information (in BCM) from 2023-01 to 2025-03.png
+(Plus 35 other .png files in the Aquasense-X/ images directories)
+dashboard/public/file.svg
+dashboard/public/globe.svg
+dashboard/public/next.svg
+dashboard/public/vercel.svg
+dashboard/public/window.svg
+diagram-export-23-2-2026-3_27_48-PM.svg
+
+=== Other ===
+.DS_Store
+Aquasense-X/.DS_Store
+Aquasense-X/FINAL IMAGES/.DS_Store
+dashboard/.gitignore
+eraser-export-export-23-2-2026-3_22_28-PM.zip
