@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AquaSense Analytics - Historical Data</title>
+    <link href="lib/outfit.css" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+    <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
+    <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
+    <script src="lib/chart.min.js"></script>
+</head>
+<body>
+    <div class="app-container">
+        <!-- Sidebar Navigation -->
+        <nav class="sidebar">
+            <div class="logo">
+                <div class="logo-icon">
+                    <ion-icon name="water-outline"></ion-icon>
+                </div>
+                <h2>AquaSense</h2>
+            </div>
+            <ul class="nav-links">
+                <li><a href="index.html"><ion-icon name="grid-outline"></ion-icon> Dashboard</a></li>
+                <li class="active"><a href="analytics.html"><ion-icon name="stats-chart-outline"></ion-icon> Analytics</a></li>
+                <li><a href="areas.html"><ion-icon name="business-outline"></ion-icon> Areas</a></li>
+                <li><a href="settings.html"><ion-icon name="settings-outline"></ion-icon> Settings</a></li>
+                <li><a href="admin.html"><ion-icon name="shield-checkmark-outline"></ion-icon> Admin Panel</a></li>
+            </ul>
+        </nav>
+
+        <!-- Main Content Area -->
+        <main class="main-content">
+            <header class="topbar">
+                <div class="search-box">
+                    <ion-icon name="search-outline"></ion-icon>
+                    <input type="text" placeholder="Search analytics...">
+                </div>
+                <div class="user-profile">
+                    <div class="notification-bell">
+                        <ion-icon name="notifications-outline"></ion-icon>
+                        <span class="badge"></span>
+                    </div>
+                    <img src="https://ui-avatars.com/api/?name=Krish+Mahajan&background=0D8ABC&color=fff" alt="User" class="avatar">
+                </div>
+            </header>
+
+            <div class="dashboard-content">
+                <div class="welcome-banner">
+                    <div>
+                        <h1>System Analytics</h1>
+                        <p>Analyze historical water usage and distribution across all areas.</p>
+                    </div>
+                    <div class="report-controls">
+                        <div class="control-group">
+                            <span class="ctrl-label">Granularity</span>
+                            <select id="granularity" class="form-select" onchange="loadReport()">
+                                <option value="hourly">Hourly</option>
+                                <option value="daily" selected>Daily</option>
+                                <option value="weekly">Weekly</option>
+                                <option value="monthly">Monthly</option>
+                            </select>
+                        </div>
+                        <div class="control-group">
+                            <span class="ctrl-label">Report Type</span>
+                            <select id="report-type" class="form-select" onchange="loadReport()">
+                                <option value="usage">Usage Trend</option>
+                                <option value="area">Area Wise</option>
+                                <option value="comparison">Comparison View</option>
+                            </select>
+                        </div>
+                        <div class="control-group cmp-toggle">
+                            <span class="ctrl-label">Compare</span>
+                            <label class="switch">
+                                <input type="checkbox" id="compare-mode" onchange="loadReport()">
+                                <span class="slider round"></span>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Automated Insights Section -->
+                <div class="insights-section">
+                    <div class="panel-header">
+                        <div class="header-with-icon">
+                            <ion-icon name="sparkles-outline" class="sparkle-icon"></ion-icon>
+                            <h3>Dynamic System Insights</h3>
+                        </div>
+                    </div>
+                    <div class="insights-grid" id="insights-list">
+                        <div class="insight-placeholder">Select parameters to generate insights...</div>
+                    </div>
+                </div>
+
+                <!-- Daily Report Generation -->
+                <div class="report-generation-section" style="margin-top: 1rem; margin-bottom: 1rem; text-align: right;">
+                    <button class="action-btn primary" onclick="generateDailyReport()"><ion-icon name="document-text-outline"></ion-icon> Generate Detailed Daily Report</button>
+                </div>
+
+                <!-- Hidden Daily Report Document -->
+                <div id="daily-report-doc" class="visual-card" style="display: none; margin-bottom: 2rem; background: #fff; color: #333; padding: 2rem;">
+                    <div style="border-bottom: 2px solid #0D8ABC; padding-bottom: 1rem; margin-bottom: 1rem;">
+                        <h2 style="color: #0D8ABC; margin: 0;">AquaSense Daily Consumption Report</h2>
+                        <p style="margin: 0.5rem 0 0 0; color: #555;">Date: <span id="report-date-val"></span></p>
+                    </div>
+                    
+                    <div style="margin-bottom: 2rem;">
+                        <h3 style="color: #333;">1. Executive Summary</h3>
+                        <p id="report-summary-text" style="line-height: 1.6;">Generating summary...</p>
+                    </div>
+
+                    <div style="margin-bottom: 2rem;">
+                        <h3 style="color: #333;">2. Consumption Metrics</h3>
+                        <ul style="line-height: 1.8;">
+                            <li><strong>Start-of-Day Tank Availability:</strong> <span id="report-start-avail">0</span>%</li>
+                            <li><strong>End-of-Day Tank Availability:</strong> <span id="report-end-avail">0</span>%</li>
+                            <li><strong>Total Water Input:</strong> <span id="report-total-in">0</span> L</li>
+                            <li><strong>Total Water Output (Consumed):</strong> <span id="report-total-out">0</span> L</li>
+                        </ul>
+                    </div>
+
+                    <div style="margin-bottom: 2rem;">
+                        <h3 style="color: #333;">3. Area-wise Breakdown</h3>
+                        <div style="display: flex; gap: 2rem; align-items: center; flex-wrap: wrap;">
+                            <div style="flex: 1; min-width: 300px;">
+                                <p style="line-height: 1.6;" id="report-area-text">Analyzing area consumption...</p>
+                            </div>
+                            <div style="flex: 1; min-width: 300px; max-width: 400px; background: #f8f9fa; padding: 1rem; border-radius: 8px;">
+                                <h4 style="text-align: center; margin-top: 0; color: #555;">Figure 1: Area Consumption Distribution</h4>
+                                <canvas id="reportAreaChart"></canvas>
+                                <p style="text-align: center; font-size: 0.85rem; color: #777; margin-bottom: 0;"><em>Fig 1: Relative water usage by zone.</em></p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div style="margin-bottom: 2rem;">
+                        <h3 style="color: #333;">4. Tank Level Stability</h3>
+                        <div style="background: #f8f9fa; padding: 1rem; border-radius: 8px; margin-bottom: 1rem;">
+                            <h4 style="text-align: center; margin-top: 0; color: #555;">Figure 2: Tank Level Trend</h4>
+                            <canvas id="reportTankChart" style="max-height: 200px;"></canvas>
+                            <p style="text-align: center; font-size: 0.85rem; color: #777; margin-bottom: 0;"><em>Fig 2: Tank availability across the 24-hour period.</em></p>
+                        </div>
+                        <p style="line-height: 1.6;" id="report-tank-text">Analyzing tank stability...</p>
+                    </div>
+                    
+                    <div style="text-align: center; margin-top: 2rem;">
+                        <button class="action-btn" onclick="window.print()" style="background: #333;"><ion-icon name="print-outline"></ion-icon> Print Report</button>
+                    </div>
+                </div>
+
+                <!-- Historic Metrics Grid -->
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="card-icon blue">
+                            <ion-icon name="calendar-outline"></ion-icon>
+                        </div>
+                        <div class="card-info">
+                            <p class="label">Daily Average Consumption</p>
+                            <h3 class="value"><span id="avg-daily-usage">0.0</span> <span class="unit">L</span></h3>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="card-icon success">
+                            <ion-icon name="leaf-outline"></ion-icon>
+                        </div>
+                        <div class="card-info">
+                            <p class="label">Total Water Recycled/Saved</p>
+                            <h3 class="value"><span id="total-saved">0.0</span> <span class="unit">L</span></h3>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="card-icon cyan">
+                            <ion-icon name="trending-down-outline"></ion-icon>
+                        </div>
+                        <div class="card-info">
+                            <p class="label">Leakage Loss Est.</p>
+                            <h3 class="value"><span id="leak-est">0.0</span> <span class="unit">L</span></h3>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Analytics Charts Row 1 -->
+                <div class="visuals-grid analytics-grid">
+                    <div class="visual-card full-width">
+                        <div class="panel-header">
+                            <h3>Consumption Trend (Liters over Time)</h3>
+                            <div class="header-actions">
+                                <button class="btn-sm" onclick="exportData()">Export CSV</button>
+                            </div>
+                        </div>
+                        <div class="chart-container-large">
+                            <canvas id="consumptionTrendChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Analytics Charts Row 2 -->
+                <div class="visuals-grid">
+                    <div class="visual-card">
+                        <div class="panel-header">
+                            <h3>Usage Distribution by Area</h3>
+                        </div>
+                        <div class="chart-container">
+                            <canvas id="areaDistributionChart"></canvas>
+                        </div>
+                    </div>
+                    <div class="visual-card">
+                        <div class="panel-header">
+                            <h3>Tank Level Stability Index</h3>
+                        </div>
+                        <div class="chart-container">
+                            <canvas id="tankStabilityChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Data Table Section -->
+                <div class="section-title">
+                    <h3>Recent Historic Events</h3>
+                </div>
+                <div class="visual-card table-card">
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>Timestamp</th>
+                                <th>Input Flow</th>
+                                <th>Output Flow</th>
+                                <th>Tank Level</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody id="history-table-body">
+                            <tr>
+                                <td colspan="5" style="text-align: center; padding: 2rem;">Loading historical data...</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script src="analytics.js"></script>
+</body>
+</html>

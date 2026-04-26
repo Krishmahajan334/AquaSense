@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AquaSense - Area Management</title>
+    <link href="lib/outfit.css" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+    <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
+    <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
+</head>
+<body>
+    <div class="app-container">
+        <!-- Sidebar Navigation -->
+        <nav class="sidebar">
+            <div class="logo">
+                <div class="logo-icon">
+                    <ion-icon name="water-outline"></ion-icon>
+                </div>
+                <h2>AquaSense</h2>
+            </div>
+            <ul class="nav-links">
+                <li><a href="index.html"><ion-icon name="grid-outline"></ion-icon> Dashboard</a></li>
+                <li><a href="analytics.html"><ion-icon name="stats-chart-outline"></ion-icon> Analytics</a></li>
+                <li class="active"><a href="areas.html"><ion-icon name="business-outline"></ion-icon> Areas</a></li>
+                <li><a href="settings.html"><ion-icon name="settings-outline"></ion-icon> Settings</a></li>
+                <li><a href="admin.html"><ion-icon name="shield-checkmark-outline"></ion-icon> Admin Panel</a></li>
+            </ul>
+        </nav>
+
+        <!-- Main Content Area -->
+        <main class="main-content">
+            <header class="topbar">
+                <div class="search-box">
+                    <ion-icon name="search-outline"></ion-icon>
+                    <input type="text" placeholder="Search areas...">
+                </div>
+                <div class="user-profile">
+                    <div class="notification-bell">
+                        <ion-icon name="notifications-outline"></ion-icon>
+                        <span class="badge"></span>
+                    </div>
+                    <img src="https://ui-avatars.com/api/?name=Krish+Mahajan&background=0D8ABC&color=fff" alt="User" class="avatar">
+                </div>
+            </header>
+
+            <div class="dashboard-content">
+                <div class="welcome-banner">
+                    <div>
+                        <h1>Area Management</h1>
+                        <p>Detailed monitoring and individual valve control for all sectors.</p>
+                    </div>
+                </div>
+
+                <!-- Areas Management Grid -->
+                <div class="areas-grid" style="grid-template-columns: 1fr;">
+                    
+                    <!-- Kitchen Detailed Section -->
+                    <div class="visual-card" style="padding: 1.5rem; margin-bottom: 2rem;">
+                        <div class="area-header" style="border-bottom: 1px solid var(--border); padding-bottom: 1rem; margin-bottom: 1.5rem;">
+                            <div style="display: flex; align-items: center; gap: 1rem;">
+                                <div class="card-icon blue" style="width: 50px; height: 50px; font-size: 24px;">
+                                    <ion-icon name="restaurant-outline"></ion-icon>
+                                </div>
+                                <div>
+                                    <h2 style="font-size: 1.4rem;">Kitchen Sector</h2>
+                                    <p class="text-muted" style="font-size: 0.9rem;">Primary indoor high-usage area</p>
+                                </div>
+                            </div>
+                            <div class="valve-indicator open" id="detail-ind-kitchen">Valve: OPEN</div>
+                        </div>
+                        
+                        <div class="stats-grid" style="grid-template-columns: repeat(3, 1fr); margin-bottom: 2rem;">
+                            <div class="stat-card" style="background: rgba(255,255,255,0.02);">
+                                <div class="card-info">
+                                    <p class="label">Current Flow</p>
+                                    <h3 class="value"><span id="flow-kitchen">0.0</span> <small class="unit">L/m</small></h3>
+                                </div>
+                            </div>
+                            <div class="stat-card" style="background: rgba(255,255,255,0.02);">
+                                <div class="card-info">
+                                    <p class="label">Total Consumption</p>
+                                    <h3 class="value"><span id="usage-kitchen">0.0</span> <small class="unit">L</small></h3>
+                                </div>
+                            </div>
+                            <div class="stat-card" style="background: rgba(255,255,255,0.02);">
+                                <div class="card-info">
+                                    <p class="label">Aeration Savings</p>
+                                    <h3 class="value" style="color: var(--success);"><span id="saved-kitchen">0.0</span> <small class="unit">L</small></h3>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div style="display: grid; grid-template-columns: 2fr 1fr; gap: 2rem; align-items: center;">
+                            <div class="control-group">
+                                <label style="display: flex; justify-content: space-between; margin-bottom: 0.5rem;">
+                                    <span>Aeration Intensity</span>
+                                    <b id="val-kitchen" class="valueHighlight">0%</b>
+                                </label>
+                                <input type="range" class="aeration-slider" id="slider-kitchen" min="0" max="100" value="0" 
+                                    oninput="document.getElementById('val-kitchen').textContent = this.value + '%'"
+                                    onchange="setAreaAeration('kitchen', this.value)">
+                                <p class="text-muted" style="font-size: 0.8rem; margin-top: 0.5rem;">Injects air into the stream to reduce water volume while maintaining pressure perception.</p>
+                            </div>
+                            <div class="action-buttons">
+                                <button class="action-btn danger btn-full" id="btn-kitchen" onclick="toggleAreaValve('kitchen')">Emergency Close</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Bathroom Detailed Section -->
+                    <div class="visual-card" style="padding: 1.5rem; margin-bottom: 2rem;">
+                        <div class="area-header" style="border-bottom: 1px solid var(--border); padding-bottom: 1rem; margin-bottom: 1.5rem;">
+                            <div style="display: flex; align-items: center; gap: 1rem;">
+                                <div class="card-icon blue" style="width: 50px; height: 50px; font-size: 24px; background-color: rgba(139, 92, 246, 0.15); color: #8b5cf6;">
+                                    <ion-icon name="water-outline"></ion-icon>
+                                </div>
+                                <div>
+                                    <h2 style="font-size: 1.4rem;">Bathroom Sector</h2>
+                                    <p class="text-muted" style="font-size: 0.9rem;">Multi-fixture grooming and hygiene</p>
+                                </div>
+                            </div>
+                            <div class="valve-indicator open" id="detail-ind-bathroom">Valve: OPEN</div>
+                        </div>
+                        
+                        <div class="stats-grid" style="grid-template-columns: repeat(3, 1fr); margin-bottom: 2rem;">
+                            <div class="stat-card" style="background: rgba(255,255,255,0.02);">
+                                <div class="card-info">
+                                    <p class="label">Current Flow</p>
+                                    <h3 class="value"><span id="flow-bathroom">0.0</span> <small class="unit">L/m</small></h3>
+                                </div>
+                            </div>
+                            <div class="stat-card" style="background: rgba(255,255,255,0.02);">
+                                <div class="card-info">
+                                    <p class="label">Total Consumption</p>
+                                    <h3 class="value"><span id="usage-bathroom">0.0</span> <small class="unit">L</small></h3>
+                                </div>
+                            </div>
+                            <div class="stat-card" style="background: rgba(255,255,255,0.02);">
+                                <div class="card-info">
+                                    <p class="label">Aeration Savings</p>
+                                    <h3 class="value" style="color: var(--success);"><span id="saved-bathroom">0.0</span> <small class="unit">L</small></h3>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div style="display: grid; grid-template-columns: 2fr 1fr; gap: 2rem; align-items: center;">
+                            <div class="control-group">
+                                <label style="display: flex; justify-content: space-between; margin-bottom: 0.5rem;">
+                                    <span>Aeration Intensity</span>
+                                    <b id="val-bathroom" class="valueHighlight">0%</b>
+                                </label>
+                                <input type="range" class="aeration-slider" id="slider-bathroom" min="0" max="100" value="0" 
+                                    oninput="document.getElementById('val-bathroom').textContent = this.value + '%'"
+                                    onchange="setAreaAeration('bathroom', this.value)">
+                            </div>
+                            <div class="action-buttons">
+                                <button class="action-btn danger btn-full" id="btn-bathroom" onclick="toggleAreaValve('bathroom')">Emergency Close</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Garden Detailed Section -->
+                    <div class="visual-card" style="padding: 1.5rem; margin-bottom: 2rem;">
+                        <div class="area-header" style="border-bottom: 1px solid var(--border); padding-bottom: 1rem; margin-bottom: 1.5rem;">
+                            <div style="display: flex; align-items: center; gap: 1rem;">
+                                <div class="card-icon blue" style="width: 50px; height: 50px; font-size: 24px; background-color: rgba(16, 185, 129, 0.15); color: var(--success);">
+                                    <ion-icon name="leaf-outline"></ion-icon>
+                                </div>
+                                <div>
+                                    <h2 style="font-size: 1.4rem;">Garden / Plantation</h2>
+                                    <p class="text-muted" style="font-size: 0.9rem;">Outdoor irrigation and landscape</p>
+                                </div>
+                            </div>
+                            <div class="valve-indicator open" id="detail-ind-garden">Valve: OPEN</div>
+                        </div>
+                        
+                        <div class="stats-grid" style="grid-template-columns: repeat(3, 1fr); margin-bottom: 2rem;">
+                            <div class="stat-card" style="background: rgba(255,255,255,0.02);">
+                                <div class="card-info">
+                                    <p class="label">Current Flow</p>
+                                    <h3 class="value"><span id="flow-garden">0.0</span> <small class="unit">L/m</small></h3>
+                                </div>
+                            </div>
+                            <div class="stat-card" style="background: rgba(255,255,255,0.02);">
+                                <div class="card-info">
+                                    <p class="label">Total Consumption</p>
+                                    <h3 class="value"><span id="usage-garden">0.0</span> <small class="unit">L</small></h3>
+                                </div>
+                            </div>
+                            <div class="stat-card" style="background: rgba(255,255,255,0.02);">
+                                <div class="card-info">
+                                    <p class="label">Aeration Savings</p>
+                                    <h3 class="value" style="color: var(--success);"><span id="saved-garden">0.0</span> <small class="unit">L</small></h3>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div style="display: grid; grid-template-columns: 2fr 1fr; gap: 2rem; align-items: center;">
+                            <div class="control-group">
+                                <label style="display: flex; justify-content: space-between; margin-bottom: 0.5rem;">
+                                    <span>Aeration Intensity</span>
+                                    <b id="val-garden" class="valueHighlight">0%</b>
+                                </label>
+                                <input type="range" class="aeration-slider" id="slider-garden" min="0" max="100" value="0" 
+                                    oninput="document.getElementById('val-garden').textContent = this.value + '%'"
+                                    onchange="setAreaAeration('garden', this.value)">
+                            </div>
+                            <div class="action-buttons">
+                                <button class="action-btn danger btn-full" id="btn-garden" onclick="toggleAreaValve('garden')">Emergency Close</button>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+        </main>
+    </div>
+
+    <script src="areas.js"></script>
+</body>
+</html>

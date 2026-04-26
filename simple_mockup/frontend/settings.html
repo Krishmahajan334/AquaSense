@@ -1,0 +1,135 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AquaSense Settings</title>
+    <link href="lib/outfit.css" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+    <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
+    <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
+</head>
+<body>
+    <div class="app-container">
+        <!-- Sidebar Navigation -->
+        <nav class="sidebar">
+            <div class="logo">
+                <div class="logo-icon">
+                    <ion-icon name="water-outline"></ion-icon>
+                </div>
+                <h2>AquaSense</h2>
+            </div>
+            <ul class="nav-links">
+                <li><a href="index.html"><ion-icon name="grid-outline"></ion-icon> Dashboard</a></li>
+                <li><a href="analytics.html"><ion-icon name="stats-chart-outline"></ion-icon> Analytics</a></li>
+                <li><a href="areas.html"><ion-icon name="business-outline"></ion-icon> Areas</a></li>
+                <li class="active"><a href="settings.html"><ion-icon name="settings-outline"></ion-icon> Settings</a></li>
+                <li><a href="admin.html"><ion-icon name="shield-checkmark-outline"></ion-icon> Admin Panel</a></li>
+            </ul>
+        </nav>
+
+        <!-- Main Content Area -->
+        <main class="main-content">
+            <header class="topbar">
+                <div class="search-box">
+                    <ion-icon name="search-outline"></ion-icon>
+                    <input type="text" placeholder="Search settings...">
+                </div>
+                <div class="user-profile">
+                    <div class="notification-bell">
+                        <ion-icon name="notifications-outline"></ion-icon>
+                        <span class="badge"></span>
+                    </div>
+                    <img src="https://ui-avatars.com/api/?name=Krish+Mahajan&background=0D8ABC&color=fff" alt="User" class="avatar">
+                </div>
+            </header>
+
+            <div class="dashboard-content">
+                <div class="welcome-banner">
+                    <div>
+                        <h1>Settings & Configuration</h1>
+                        <p>Manage system preferences, automation logic, and UI alerts.</p>
+                    </div>
+                </div>
+
+                <div class="visuals-grid analytics-grid">
+                    
+                    <!-- General System Settings -->
+                    <div class="visual-card">
+                        <div class="panel-header">
+                            <h3>General System Automation</h3>
+                        </div>
+                        <div class="panel-body" style="padding: 1.5rem;">
+                            <div class="stat-row" style="margin-bottom: 2rem;">
+                                <div>
+                                    <h4 style="font-size: 1.1rem; margin-bottom: 0.3rem;">Auto Mode</h4>
+                                    <p class="text-muted" style="font-size: 0.9rem;">Allow the system to automatically adjust aeration based on tank level and consumption anomalies.</p>
+                                </div>
+                                <label class="switch">
+                                    <input type="checkbox" id="settings-auto-mode" onchange="toggleAutoMode(this.checked)">
+                                    <span class="slider round"></span>
+                                </label>
+                            </div>
+                            
+                            <hr style="border: 0; border-top: 1px solid var(--border); margin-bottom: 2rem;">
+                            
+                            <div class="stat-row">
+                                <div>
+                                    <h4 style="font-size: 1.1rem; margin-bottom: 0.3rem;">Reset System State</h4>
+                                    <p class="text-muted" style="font-size: 0.9rem;">Clear all local temporary state variables across the dashboard.</p>
+                                </div>
+                                <button class="action-btn danger">Factory Reset</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Area Default Settings -->
+                    <div class="visual-card">
+                        <div class="panel-header">
+                            <h3>Area Defaults</h3>
+                            <p class="text-muted" style="font-size: 0.85rem; margin-top: 5px;">Set your preferred baseline aeration targets for each area.</p>
+                        </div>
+                        <div class="panel-body" style="padding: 1.5rem; display: flex; flex-direction: column; gap: 1.5rem;">
+                            
+                            <div class="control-group">
+                                <label style="display: flex; justify-content: space-between;">
+                                    <span>Kitchen Default Aeration</span>
+                                    <span id="set-ind-kitchen" class="valueHighlight">0%</span>
+                                </label>
+                                <input type="range" class="aeration-slider" id="set-slider-kitchen" min="0" max="100" value="0" 
+                                    onchange="pushAerationUpdate('kitchen', this.value)" 
+                                    oninput="document.getElementById('set-ind-kitchen').textContent = this.value + '%'">
+                            </div>
+
+                            <div class="control-group">
+                                <label style="display: flex; justify-content: space-between;">
+                                    <span>Bathroom Default Aeration</span>
+                                    <span id="set-ind-bathroom" class="valueHighlight">0%</span>
+                                </label>
+                                <input type="range" class="aeration-slider" id="set-slider-bathroom" min="0" max="100" value="0" 
+                                    onchange="pushAerationUpdate('bathroom', this.value)" 
+                                    oninput="document.getElementById('set-ind-bathroom').textContent = this.value + '%'">
+                            </div>
+
+                            <div class="control-group">
+                                <label style="display: flex; justify-content: space-between;">
+                                    <span>Garden Default Aeration</span>
+                                    <span id="set-ind-garden" class="valueHighlight">0%</span>
+                                </label>
+                                <input type="range" class="aeration-slider" id="set-slider-garden" min="0" max="100" value="0" 
+                                    onchange="pushAerationUpdate('garden', this.value)" 
+                                    oninput="document.getElementById('set-ind-garden').textContent = this.value + '%'">
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </main>
+    </div>
+
+    <script src="settings.js"></script>
+</body>
+</html>

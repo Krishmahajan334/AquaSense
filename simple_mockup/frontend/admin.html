@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AquaSense Admin - Notifications & Devices</title>
+    <link href="lib/outfit.css" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+    <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
+    <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
+</head>
+<body>
+    <!-- Login Overlay -->
+    <div id="login-overlay" style="position: fixed; inset: 0; background: var(--bg-dark); z-index: 9999; display: flex; align-items: center; justify-content: center;">
+        <div class="visual-card" style="padding: 2.5rem; width: 350px; text-align: center; box-shadow: 0 10px 30px rgba(0,0,0,0.8);">
+            <div class="logo-icon" style="margin: 0 auto 1.5rem auto; width: 60px; height: 60px; font-size: 32px;">
+                <ion-icon name="shield-half-outline"></ion-icon>
+            </div>
+            <h2 style="margin-bottom: 0.5rem;">Admin Access</h2>
+            <p style="color: var(--text-muted); margin-bottom: 2rem; font-size: 0.9rem;">Please login to continue.</p>
+            
+            <div class="control-group" style="text-align: left; margin-bottom: 1rem;">
+                <label>Username</label>
+                <input type="text" id="admin-user" style="background: rgba(0,0,0,0.3); color: white; border: 1px solid var(--border); padding: 0.8rem; border-radius: 8px; width: 100%; outline: none;">
+            </div>
+            
+            <div class="control-group" style="text-align: left; margin-bottom: 2rem;">
+                <label>Password</label>
+                <input type="password" id="admin-pass" style="background: rgba(0,0,0,0.3); color: white; border: 1px solid var(--border); padding: 0.8rem; border-radius: 8px; width: 100%; outline: none;">
+            </div>
+            
+            <button class="action-btn primary btn-full" onclick="adminLogin()">Login</button>
+            <p id="login-error" style="color: var(--danger); margin-top: 1rem; font-size: 0.85rem; display: none;">Invalid credentials.</p>
+        </div>
+    </div>
+
+    <div class="app-container">
+        <!-- Sidebar Navigation -->
+        <nav class="sidebar">
+            <div class="logo">
+                <div class="logo-icon">
+                    <ion-icon name="water-outline"></ion-icon>
+                </div>
+                <h2>AquaSense</h2>
+            </div>
+            <ul class="nav-links">
+                <li><a href="index.html"><ion-icon name="grid-outline"></ion-icon> Dashboard</a></li>
+                <li><a href="analytics.html"><ion-icon name="stats-chart-outline"></ion-icon> Analytics</a></li>
+                <li><a href="areas.html"><ion-icon name="business-outline"></ion-icon> Areas</a></li>
+                <li><a href="settings.html"><ion-icon name="settings-outline"></ion-icon> Settings</a></li>
+                <li class="active"><a href="admin.html"><ion-icon name="shield-checkmark-outline"></ion-icon> Admin Panel</a></li>
+            </ul>
+        </nav>
+
+        <!-- Main Content Area -->
+        <main class="main-content">
+            <header class="topbar">
+                <div class="search-box">
+                    <ion-icon name="search-outline"></ion-icon>
+                    <input type="text" placeholder="Search admin settings...">
+                </div>
+                <div class="user-profile">
+                    <div class="notification-bell">
+                        <ion-icon name="notifications-outline"></ion-icon>
+                        <span class="badge"></span>
+                    </div>
+                    <img src="https://ui-avatars.com/api/?name=Admin&background=ef4444&color=fff" alt="User" class="avatar">
+                </div>
+            </header>
+
+            <div class="dashboard-content">
+                <div class="welcome-banner">
+                    <div>
+                        <h1>Administration Panel</h1>
+                        <p>Manage system notifications and device state.</p>
+                    </div>
+                </div>
+
+                <div class="visuals-grid">
+                    <!-- Telegram Notification Setup -->
+                    <div class="visual-card">
+                        <div class="panel-header">
+                            <h3><ion-icon name="paper-plane-outline"></ion-icon> Telegram Notifications</h3>
+                        </div>
+                        <div class="panel-body" style="padding: 1.5rem;">
+                            <p style="color: var(--text-muted); margin-bottom: 1.5rem;">
+                                Configure Telegram to receive critical system alerts and leakage warnings directly to your phone.
+                            </p>
+                            
+                            <div class="control-group" style="margin-bottom: 1rem;">
+                                <label style="font-size: 0.9rem;">Bot API Token</label>
+                                <input type="text" id="tg-token" style="background: var(--bg-dark); color: white; border: 1px solid var(--border); padding: 0.8rem; border-radius: 8px; width: 100%;" placeholder="e.g. 123456:ABC-DEF1234ghIkl-zyx57W2v1u123ew11">
+                                <p class="hint">Obtained from @BotFather on Telegram.</p>
+                            </div>
+                            
+                            <div class="control-group" style="margin-bottom: 1.5rem;">
+                                <label style="font-size: 0.9rem;">Chat ID</label>
+                                <input type="text" id="tg-chatid" style="background: var(--bg-dark); color: white; border: 1px solid var(--border); padding: 0.8rem; border-radius: 8px; width: 100%;" placeholder="e.g. 123456789">
+                                <p class="hint">Your personal chat ID, obtained from @userinfobot.</p>
+                            </div>
+                            
+                            <div style="display: flex; gap: 1rem;">
+                                <button class="action-btn primary btn-full" onclick="saveTelegramConfig()">Save Settings</button>
+                                <button class="action-btn" style="background: var(--success); width: 100%; border: none;" onclick="testTelegramConfig()">Test Notification</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Device Management -->
+                    <div class="visual-card">
+                        <div class="panel-header">
+                            <h3 style="color: var(--danger);"><ion-icon name="warning-outline"></ion-icon> Device Management</h3>
+                        </div>
+                        <div class="panel-body" style="padding: 1.5rem;">
+                            <p style="color: var(--text-muted); margin-bottom: 1.5rem;">
+                                Use these controls to perform a hard reset on the system. This will clear all historical data and reset the in-memory state.
+                            </p>
+                            
+                            <div style="background: rgba(239, 68, 68, 0.1); border: 1px solid var(--danger); padding: 1.5rem; border-radius: 12px; margin-bottom: 1rem;">
+                                <h4 style="color: var(--danger); margin-bottom: 0.5rem;">Danger Zone</h4>
+                                <p style="font-size: 0.9rem; margin-bottom: 1rem;">Resetting the system will clear all historical CSV data and reset tank levels to default.</p>
+                                <button class="action-btn danger btn-full" onclick="resetSystemData()">Factory Reset System</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Telegram Setup Guide -->
+                <div class="visual-card" style="margin-top: 2rem;">
+                    <div class="panel-header">
+                        <h3><ion-icon name="help-circle-outline"></ion-icon> How to Setup Telegram Bot</h3>
+                    </div>
+                    <div class="panel-body" style="padding: 1.5rem; line-height: 1.8; color: var(--text-muted);">
+                        <ol style="margin-left: 1.5rem;">
+                            <li>Open the Telegram app and search for <strong>@BotFather</strong>.</li>
+                            <li>Send the message <code>/newbot</code> and follow the instructions to create your bot.</li>
+                            <li>Once created, BotFather will give you an <strong>HTTP API Token</strong>. Copy and paste it into the "Bot API Token" field above.</li>
+                            <li>Search for your newly created bot in Telegram and send it a message like <code>/start</code>. This is required before the bot can message you.</li>
+                            <li>To get your Chat ID, search for <strong>@userinfobot</strong> or <strong>@getmyid_bot</strong> in Telegram and start a chat. It will reply with your ID. Copy it into the "Chat ID" field above.</li>
+                        </ol>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script src="admin.js"></script>
+</body>
+</html>

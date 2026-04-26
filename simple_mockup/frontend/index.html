@@ -1,0 +1,380 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AquaSense Dashboard - Multi-Area</title>
+    <link href="lib/outfit.css" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+    <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
+    <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
+    <script src="lib/chart.min.js"></script>
+</head>
+<body>
+    <div class="app-container">
+        <!-- Sidebar Navigation -->
+        <nav class="sidebar">
+            <div class="logo">
+                <div class="logo-icon">
+                    <ion-icon name="water-outline"></ion-icon>
+                </div>
+                <h2>AquaSense</h2>
+            </div>
+            <ul class="nav-links">
+                <li class="active"><a href="index.html"><ion-icon name="grid-outline"></ion-icon> Dashboard</a></li>
+                <li><a href="analytics.html"><ion-icon name="stats-chart-outline"></ion-icon> Analytics</a></li>
+                <li><a href="areas.html"><ion-icon name="business-outline"></ion-icon> Areas</a></li>
+                <li><a href="settings.html"><ion-icon name="settings-outline"></ion-icon> Settings</a></li>
+                <li><a href="admin.html"><ion-icon name="shield-checkmark-outline"></ion-icon> Admin Panel</a></li>
+            </ul>
+        </nav>
+
+        <!-- Main Content Area -->
+        <main class="main-content">
+            <header class="topbar">
+                <div class="search-box">
+                    <ion-icon name="search-outline"></ion-icon>
+                    <input type="text" placeholder="Search devices...">
+                </div>
+                <!-- Auto Mode Toggle -->
+                <div class="auto-mode-switch">
+                    <span>Auto Mode</span>
+                    <label class="switch">
+                      <input type="checkbox" id="auto-mode-toggle">
+                      <span class="slider round"></span>
+                    </label>
+                </div>
+                <div class="user-profile">
+                    <div class="notification-bell">
+                        <ion-icon name="notifications-outline"></ion-icon>
+                        <span class="badge"></span>
+                    </div>
+                    <img src="https://ui-avatars.com/api/?name=Krish+Mahajan&background=0D8ABC&color=fff" alt="User" class="avatar">
+                </div>
+            </header>
+
+            <div class="dashboard-content">
+                <div class="welcome-banner">
+                    <div>
+                        <h1>Overview</h1>
+                        <p>Monitor your area-wise water distribution in real-time.</p>
+                    </div>
+                    <div class="status-indicator">
+                        <span class="dot pulse"></span> <span id="system-status-text">System Active</span>
+                    </div>
+                </div>
+
+                <!-- Smart Suggestions Banner -->
+                <div class="suggestions-banner" id="suggestions-banner">
+                    <div class="suggestion-icon"><ion-icon name="bulb-outline"></ion-icon></div>
+                    <div class="suggestion-text">
+                        <h4>Smart Suggestion</h4>
+                        <p id="suggestion-msg">System analyzing water usage patterns...</p>
+                    </div>
+                </div>
+
+                <!-- Main Overview Cards (Totals) -->
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="card-icon blue">
+                            <ion-icon name="water-outline"></ion-icon>
+                        </div>
+                        <div class="card-info">
+                            <p class="label">Total System Usage</p>
+                            <h3 class="value"><span id="water-usage-val">0.00</span> <span class="unit">L</span></h3>
+                        </div>
+                    </div>
+
+                    <div class="stat-card">
+                        <div class="card-icon cyan">
+                            <ion-icon name="speedometer-outline"></ion-icon>
+                        </div>
+                        <div class="card-info">
+                            <p class="label">Total Output Flow</p>
+                            <h3 class="value"><span id="flow-rate-val">0.00</span> <span class="unit">L/m</span></h3>
+                        </div>
+                    </div>
+                    
+                    <div class="stat-card">
+                        <div class="card-icon primary" id="tank-icon-container">
+                            <ion-icon name="cube-outline"></ion-icon>
+                        </div>
+                        <div class="card-info">
+                            <p class="label">Tank Level</p>
+                            <h3 class="value"><span id="tank-level-val">0.0</span> <span class="unit">%</span></h3>
+                        </div>
+                    </div>
+                    
+                    <div class="stat-card" id="supply-card">
+                        <div class="card-icon success" id="supply-icon-container">
+                            <ion-icon name="swap-vertical-outline"></ion-icon>
+                        </div>
+                        <div class="card-info">
+                            <p class="label">Main Supply Status</p>
+                            <h3 class="value" id="supply-status-val">Available</h3>
+                        </div>
+                    </div>
+
+                    <div class="stat-card">
+                        <div class="card-icon blue">
+                            <ion-icon name="leaf-outline"></ion-icon>
+                        </div>
+                        <div class="card-info">
+                            <p class="label">Water Saved (Aeration)</p>
+                            <h3 class="value"><span id="water-saved-val">0.0</span> <span class="unit">L</span></h3>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Interactive Pipeline Schema Section -->
+                <div class="visual-card schema-card" style="margin-bottom: 1.5rem;">
+                    <div class="panel-header">
+                        <h3>Control Panel</h3>
+                        <p class="text-muted" style="font-size: 0.8rem;">Click on any valve node to manage area-specific settings.</p>
+                    </div>
+                    <div class="schema-container">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 400" id="pipeline-svg">
+                            <!-- Background Grid -->
+                            <defs>
+                                <pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse">
+                                    <path d="M 40 0 L 0 0 0 40" fill="none" stroke="rgba(255,255,255,0.03)" stroke-width="0.5"/>
+                                </pattern>
+                            </defs>
+                            <rect width="100%" height="100%" fill="url(#grid)" />
+
+                            <!-- Main Input Pipe -->
+                            <path id="pipe-input" d="M 400,0 L 400,60" class="pipe" />
+                            <path id="pipe-input-ref" d="M 400,0 L 400,60" class="pipe-ref" />
+                            <path id="pipe-input-ref-2" d="M 400,0 L 400,60" class="pipe-ref-2" />
+                            <path id="pipe-input-ref-3" d="M 400,0 L 400,60" class="pipe-ref-3" />
+                            
+                            <!-- Interactive Tank Node -->
+                            <foreignObject x="365" y="60" width="70" height="80">
+                                <div xmlns="http://www.w3.org/1999/xhtml" class="tank-body" style="height: 100%; width: 100%; border-radius: 8px; border: 2px solid #334155; position: relative; overflow: hidden; background: #0f172a; box-shadow: 0 0 15px rgba(0,0,0,0.5); padding: 0; margin: 0;">
+                                    <div class="tank-water" id="tank-water-fill" style="position: absolute; bottom: 0; width: 100%; height: 0%; background: linear-gradient(180deg, #38bdf8 0%, #0284c7 100%); transition: height 1s ease, background 0.5s ease;"></div>
+                                    <div class="tank-overlay" style="z-index: 2;">
+                                        <h2 id="tank-viz-text" style="color: #fff; font-size: 1rem; margin: 0; text-shadow: 0 2px 4px rgba(0,0,0,0.8);">0%</h2>
+                                    </div>
+                                </div>
+                            </foreignObject>
+                            <text x="445" y="105" class="label" style="fill: #9ca3af; font-size: 14px; font-weight: 500;">Main Tank</text>
+
+                            <!-- Output Header -->
+                            <path id="pipe-output-main" d="M 400,140 L 400,180" class="pipe" />
+                            <path id="pipe-output-main-ref" d="M 400,140 L 400,180" class="pipe-ref" />
+                            <path id="pipe-output-main-ref-2" d="M 400,140 L 400,180" class="pipe-ref-2" />
+                            <path id="pipe-output-main-ref-3" d="M 400,140 L 400,180" class="pipe-ref-3" />
+                            
+                            <!-- Branching Horizontal (Split for directional flow) -->
+                            <path id="pipe-header-left" d="M 400,180 L 150,180" class="pipe" />
+                            <path id="pipe-header-left-ref" d="M 400,180 L 150,180" class="pipe-ref" />
+                            <path id="pipe-header-left-ref-2" d="M 400,180 L 150,180" class="pipe-ref-2" />
+                            <path id="pipe-header-left-ref-3" d="M 400,180 L 150,180" class="pipe-ref-3" />
+                            
+                            <path id="pipe-header-right" d="M 400,180 L 650,180" class="pipe" />
+                            <path id="pipe-header-right-ref" d="M 400,180 L 650,180" class="pipe-ref" />
+                            <path id="pipe-header-right-ref-2" d="M 400,180 L 650,180" class="pipe-ref-2" />
+                            <path id="pipe-header-right-ref-3" d="M 400,180 L 650,180" class="pipe-ref-3" />
+                            
+                            <!-- Junction Nodes -->
+                            <circle cx="150" cy="180" r="6" class="node" />
+                            <circle cx="400" cy="180" r="6" class="node" />
+                            <circle cx="650" cy="180" r="6" class="node" />
+
+                            <!-- Area Branches -->
+                            <!-- Kitchen -->
+                            <path id="pipe-kitchen-top" d="M 150,180 L 150,220" class="pipe" />
+                            <path id="pipe-kitchen-top-ref" d="M 150,180 L 150,220" class="pipe-ref" />
+                            <path id="pipe-kitchen-top-ref-2" d="M 150,180 L 150,220" class="pipe-ref-2" />
+                            <path id="pipe-kitchen-top-ref-3" d="M 150,180 L 150,220" class="pipe-ref-3" />
+                            <path id="pipe-kitchen-bottom" d="M 150,235 L 150,300" class="pipe" />
+                            <path id="pipe-kitchen-bottom-ref" d="M 150,235 L 150,300" class="pipe-ref" />
+                            <path id="pipe-kitchen-bottom-ref-2" d="M 150,235 L 150,300" class="pipe-ref-2" />
+                            <path id="pipe-kitchen-bottom-ref-3" d="M 150,235 L 150,300" class="pipe-ref-3" />
+                            <g class="valve-node" onclick="openValveControl('kitchen')" 
+                               onmousemove="showValveTooltip('kitchen', event)" 
+                               onmouseleave="hideValveTooltip()"
+                               id="node-kitchen">
+                                <rect x="135" y="220" width="30" height="15" rx="2" class="valve-rect" />
+                                <text x="110" y="210" class="label">Kitchen</text>
+                                <circle cx="150" cy="227.5" r="4" class="valve-dot" id="dot-kitchen" />
+                            </g>
+
+                            <!-- Bathroom -->
+                            <path id="pipe-bathroom-top" d="M 400,180 L 400,220" class="pipe" />
+                            <path id="pipe-bathroom-top-ref" d="M 400,180 L 400,220" class="pipe-ref" />
+                            <path id="pipe-bathroom-top-ref-2" d="M 400,180 L 400,220" class="pipe-ref-2" />
+                            <path id="pipe-bathroom-top-ref-3" d="M 400,180 L 400,220" class="pipe-ref-3" />
+                            <path id="pipe-bathroom-bottom" d="M 400,235 L 400,300" class="pipe" />
+                            <path id="pipe-bathroom-bottom-ref" d="M 400,235 L 400,300" class="pipe-ref" />
+                            <path id="pipe-bathroom-bottom-ref-2" d="M 400,235 L 400,300" class="pipe-ref-2" />
+                            <path id="pipe-bathroom-bottom-ref-3" d="M 400,235 L 400,300" class="pipe-ref-3" />
+                            <g class="valve-node" onclick="openValveControl('bathroom')" 
+                               onmousemove="showValveTooltip('bathroom', event)" 
+                               onmouseleave="hideValveTooltip()"
+                               id="node-bathroom">
+                                <rect x="385" y="220" width="30" height="15" rx="2" class="valve-rect" />
+                                <text x="360" y="210" class="label">Bathroom</text>
+                                <circle cx="400" cy="227.5" r="4" class="valve-dot" id="dot-bathroom" />
+                            </g>
+
+                            <!-- Garden -->
+                            <path id="pipe-garden-top" d="M 650,180 L 650,220" class="pipe" />
+                            <path id="pipe-garden-top-ref" d="M 650,180 L 650,220" class="pipe-ref" />
+                            <path id="pipe-garden-top-ref-2" d="M 650,180 L 650,220" class="pipe-ref-2" />
+                            <path id="pipe-garden-top-ref-3" d="M 650,180 L 650,220" class="pipe-ref-3" />
+                            <path id="pipe-garden-bottom" d="M 650,235 L 650,300" class="pipe" />
+                            <path id="pipe-garden-bottom-ref" d="M 650,235 L 650,300" class="pipe-ref" />
+                            <path id="pipe-garden-bottom-ref-2" d="M 650,235 L 650,300" class="pipe-ref-2" />
+                            <path id="pipe-garden-bottom-ref-3" d="M 650,235 L 650,300" class="pipe-ref-3" />
+                            <g class="valve-node" onclick="openValveControl('garden')" 
+                               onmousemove="showValveTooltip('garden', event)" 
+                               onmouseleave="hideValveTooltip()"
+                               id="node-garden">
+                                <rect x="635" y="220" width="30" height="15" rx="2" class="valve-rect" />
+                                <text x="610" y="210" class="label">Garden</text>
+                                <circle cx="650" cy="227.5" r="4" class="valve-dot" id="dot-garden" />
+                            </g>
+                        </svg>
+                    </div>
+                </div>
+
+                <!-- Visual Data Section: Charts & Tank -->
+                <div class="visuals-grid">
+                    <div class="visual-card chart-card">
+                        <div class="panel-header">
+                            <h3>Live Flow Analytics</h3>
+                        </div>
+                        <div class="chart-container">
+                            <canvas id="flowChart"></canvas>
+                        </div>
+                    </div>
+                    <!-- Removed separate tank viz card as it's now in SVG -->
+                </div>
+
+                <div class="section-title">
+                    <h3>Area-Wise Management</h3>
+                </div>
+
+                <!-- Area-wise Cards -->
+                <div class="areas-grid">
+                    <!-- Kitchen -->
+                    <div class="area-card" id="area-kitchen">
+                        <div class="area-header">
+                            <h4><ion-icon name="restaurant-outline"></ion-icon> Kitchen</h4>
+                            <div class="valve-indicator open" id="ind-kitchen">Aeration: 0%</div>
+                        </div>
+                        <div class="area-stats">
+                            <div>
+                                <p class="label">Flow Rate</p>
+                                <h3 class="value"><span id="flow-kitchen">0.0</span> <span class="unit">L/m</span></h3>
+                            </div>
+                            <div>
+                                <p class="label">Total</p>
+                                <h3 class="value"><span id="usage-kitchen">0.0</span> <span class="unit">L</span></h3>
+                            </div>
+                        </div>
+                        <div class="aeration-control">
+                            <input type="range" class="aeration-slider" id="slider-kitchen" min="0" max="100" value="0" onchange="setAeration('kitchen', this.value)" oninput="document.getElementById('ind-kitchen').textContent = 'Aeration: ' + this.value + '%'">
+                        </div>
+                        <button class="action-btn danger btn-full" onclick="toggleValve('kitchen')" id="btn-kitchen">Close Valve</button>
+                    </div>
+
+                    <!-- Bathroom -->
+                    <div class="area-card" id="area-bathroom">
+                        <div class="area-header">
+                            <h4><ion-icon name="water-outline"></ion-icon> Bathroom</h4>
+                            <div class="valve-indicator open" id="ind-bathroom">Aeration: 0%</div>
+                        </div>
+                        <div class="area-stats">
+                            <div>
+                                <p class="label">Flow Rate</p>
+                                <h3 class="value"><span id="flow-bathroom">0.0</span> <span class="unit">L/m</span></h3>
+                            </div>
+                            <div>
+                                <p class="label">Total</p>
+                                <h3 class="value"><span id="usage-bathroom">0.0</span> <span class="unit">L</span></h3>
+                            </div>
+                        </div>
+                        <div class="aeration-control">
+                            <input type="range" class="aeration-slider" id="slider-bathroom" min="0" max="100" value="0" onchange="setAeration('bathroom', this.value)" oninput="document.getElementById('ind-bathroom').textContent = 'Aeration: ' + this.value + '%'">
+                        </div>
+                        <button class="action-btn danger btn-full" onclick="toggleValve('bathroom')" id="btn-bathroom">Close Valve</button>
+                    </div>
+
+                    <!-- Garden -->
+                    <div class="area-card" id="area-garden">
+                        <div class="area-header">
+                            <h4><ion-icon name="leaf-outline"></ion-icon> Garden</h4>
+                            <div class="valve-indicator open" id="ind-garden">Aeration: 0%</div>
+                        </div>
+                        <div class="area-stats">
+                            <div>
+                                <p class="label">Flow Rate</p>
+                                <h3 class="value"><span id="flow-garden">0.0</span> <span class="unit">L/m</span></h3>
+                            </div>
+                            <div>
+                                <p class="label">Total</p>
+                                <h3 class="value"><span id="usage-garden">0.0</span> <span class="unit">L</span></h3>
+                            </div>
+                        </div>
+                        <div class="aeration-control">
+                            <input type="range" class="aeration-slider" id="slider-garden" min="0" max="100" value="0" onchange="setAeration('garden', this.value)" oninput="document.getElementById('ind-garden').textContent = 'Aeration: ' + this.value + '%'">
+                        </div>
+                        <button class="action-btn danger btn-full" onclick="toggleValve('garden')" id="btn-garden">Close Valve</button>
+                    </div>
+                </div>
+
+                <!-- System Logs panel -->
+                <div class="bottom-grid logs">
+                    <div class="panel alerts-panel full-width">
+                        <div class="panel-header">
+                            <h3>System Logs</h3>
+                        </div>
+                        <div class="panel-body" id="alerts-container">
+                            <ul class="alerts-list" id="alerts-list">
+                                <li class="alert-item empty">Waiting for system data...</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Floating Control Modal -->
+    <div id="control-modal" class="modal-backdrop" style="display: none;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 id="modal-title">Area Control</h3>
+                <button class="close-modal" onclick="closeModal()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="stat-row">
+                    <span class="label">Live Flow Rate:</span>
+                    <span class="valueHighlight"><span id="modal-flow">0.0</span> <small>L/min</small></span>
+                </div>
+                <div class="control-group">
+                    <label>Aeration %:</label>
+                    <div class="slider-container">
+                        <input type="range" id="modal-aeration" min="0" max="100" value="0" 
+                               oninput="updateModalAerationLabel(this.value)" 
+                               onchange="saveModalAeration()">
+                        <span id="modal-aeration-label">0%</span>
+                    </div>
+                    <p class="hint">Higher aeration reduces liquid water consumption.</p>
+                </div>
+                <button id="modal-valve-btn" class="action-btn btn-full" onclick="toggleModalValve()">Toggle Valve</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="valve-tooltip" class="valve-tooltip">
+        <div class="tooltip-header" id="tt-name">Kitchen Area</div>
+        <div class="tooltip-row"><span>Flow:</span> <b id="tt-flow">0.0</b> L/m</div>
+        <div class="tooltip-row"><span>Air:</span> <b id="tt-aeration">0</b>%</div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
