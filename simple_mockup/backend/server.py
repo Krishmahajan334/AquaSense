@@ -7,6 +7,7 @@ from datetime import datetime
 import json
 import urllib.request
 import urllib.parse
+import threading
 frontend_dir = os.path.join(os.path.dirname(os.path.abspath(__file__)), '../frontend')
 app = Flask(__name__, static_folder=frontend_dir, static_url_path='')
 
@@ -73,6 +74,93 @@ def send_telegram_alert(message):
                 urllib.request.urlopen(req, timeout=5)
     except Exception as e:
         print(f"Failed to send telegram alert: {e}")
+
+def send_telegram_message(chat_id, text):
+    try:
+        if os.path.exists(CONFIG_FILE):
+            with open(CONFIG_FILE, 'r') as f:
+                config = json.load(f)
+            bot_token = config.get('telegram_bot_token')
+            if bot_token:
+                url = f"https://api.telegram.org/bot{bot_token}/sendMessage"
+                data = urllib.parse.urlencode({'chat_id': chat_id, 'text': text}).encode('utf-8')
+                req = urllib.request.Request(url, data=data)
+                urllib.request.urlopen(req, timeout=5)
+    except Exception as e:
+        print(f"Failed to send telegram message: {e}")
+
+def handle_telegram_command(text, chat_id):
+    global system_data
+    parts = text.lower().split()
+    cmd = parts[0]
+    
+    if cmd == '/report':
+        msg = (f"📊 *AquaSense Status Report*\n"
+               f"Tank Level: {system_data['tank_level']:.1f}%\n"
+               f"Input Flow: {system_data['main_input_flow']:.1f} L/m\n"
+               f"Total Output: {system_data['total_output_flow']:.1f} L/m\n"
+               f"Total Water Saved: {system_data['total_water_saved']:.1f} L\n"
+               f"Auto Mode: {'🟢 ON' if system_data['auto_mode'] else '🔴 OFF'}")
+        send_telegram_message(chat_id, msg)
+        
+    elif cmd == '/area' and len(parts) >= 2:
+        subcmd = parts[1]
+        if subcmd == 'stats':
+            msg = "💧 *Area Statistics*\n"
+            for aid, adata in system_data['areas'].items():
+                msg += f"- {adata['name']}: {adata['flow_rate']:.1f} L/m ({'Open' if adata['valve_open'] else 'Closed'}, Aer: {adata['aeration']}%)\n"
+            send_telegram_message(chat_id, msg)
+        elif subcmd == 'control' and len(parts) >= 5:
+            # /area control kitchen valve off
+            area_id = parts[2]
+            setting = parts[3]
+            value = parts[4]
+            
+            if area_id in system_data['areas']:
+                if setting == 'valve':
+                    is_open = (value == 'on')
+                    system_data['areas'][area_id]['valve_open'] = is_open
+                    send_telegram_message(chat_id, f"✅ Set {area_id} valve to {'ON' if is_open else 'OFF'}.")
+                elif setting == 'aeration':
+                    try:
+                        aer_val = int(value)
+                        system_data['areas'][area_id]['aeration'] = max(0, min(100, aer_val))
+                        send_telegram_message(chat_id, f"✅ Set {area_id} aeration to {system_data['areas'][area_id]['aeration']}%.")
+                    except ValueError:
+                        send_telegram_message(chat_id, "❌ Invalid aeration value.")
+            else:
+                send_telegram_message(chat_id, "❌ Unknown area.")
+    else:
+        send_telegram_message(chat_id, "Available commands:\n/report\n/area stats\n/area control <area> valve <on|off>\n/area control <area> aeration <0-100>")
+
+def telegram_polling_loop():
+    last_update_id = 0
+    while True:
+        try:
+            if os.path.exists(CONFIG_FILE):
+                with open(CONFIG_FILE, 'r') as f:
+                    config = json.load(f)
+                bot_token = config.get('telegram_bot_token')
+                allowed_chat_id = config.get('telegram_chat_id')
+                
+                if bot_token and allowed_chat_id:
+                    url = f"https://api.telegram.org/bot{bot_token}/getUpdates?offset={last_update_id + 1}&timeout=5"
+                    req = urllib.request.Request(url)
+                    response = urllib.request.urlopen(req, timeout=10)
+                    data = json.loads(response.read().decode('utf-8'))
+                    
+                    if data.get('ok') and data.get('result'):
+                        for update in data['result']:
+                            last_update_id = update['update_id']
+                            message = update.get('message', {})
+                            text = message.get('text', '').strip()
+                            chat_id = str(message.get('chat', {}).get('id', ''))
+                            
+                            if chat_id == str(allowed_chat_id) and text.startswith('/'):
+                                handle_telegram_command(text, chat_id)
+        except Exception as e:
+            pass # Ignore timeout/connection errors
+        time.sleep(2)
 
 def add_alert(message):
     global system_data
@@ -387,6 +475,11 @@ def toggle_control():
     return jsonify({"status": "success", "areas": system_data["areas"]})
 
 if __name__ == '__main__':
+    # Start telegram polling thread in the worker process
+    if os.environ.get("WERKZEUG_RUN_MAIN") == "true":
+        t = threading.Thread(target=telegram_polling_loop, daemon=True)
+        t.start()
+        
     ip = get_local_ip()
     print("\n" + "="*50)
     print(" AQUASENSE DASHBOARD READY")
