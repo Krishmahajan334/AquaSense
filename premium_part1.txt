@@ -1,0 +1,64 @@
+# AquaSense: High-Fidelity Smart Water Ecosystem
+
+## Slide 1: Frontispiece
+- **Project Designation:** AquaSense
+- **Operational Domain:** Intelligent IoT Resource Management
+- **The Team (24UCS Cluster):** 
+  - Shreyash Chougule (Lead)
+  - Krish Mahajan (Backend/IoT)
+  - Pranav Chougule (Hardware Integration)
+  - Varad Dake (UI/UX)
+- **Principal Investigator:** V.V. KHERADKAR
+- **Department:** Computer Science & Engineering, DKTE
+- **Timeline:** Academic Cycle 2025-26
+
+## Slide 2: Executive Summary
+- AquaSense: An end-to-end framework for industrial and domestic water telemetry.
+- Architectural Core: Heterogeneous sensor array (Flow, Ultrasonic) interfaced with ESP32 edge nodes.
+- Intelligence Layer: Adaptive conservation algorithms based on real-time reservoir data.
+- User Interface: Glassmorphic, real-time analytics dashboard with manual/automated override capabilities.
+- Value Proposition: quantifiable reduction in water footprints and operational overheads.
+
+## Slide 3: The Global Crisis & Local Inefficiency
+- **The Challenge:** 40% of urban water supply is lost to non-revenue water (leaks/inefficiency).
+- **The Gap:** Current systems are either purely manual or lack granular, zone-specific telemetry.
+- **The Solution:** Granular monitoring at the faucet/zone level combined with automated valve actuation.
+
+## Slide 4: Strategic Objectives
+- **Telemetry Precision:** High-frequency sampling of flow rates and tank levels.
+- **Autonomous Regulation:** Logic-driven valve positioning (SG90) to maintain hydraulic equilibrium.
+- **Predictive Anomaly Detection:** Real-time leakage identification via consumption patterns.
+- **Integrated Dashboarding:** Unified platform for multi-node management and historical reporting.
+
+## Slide 5: Scope of Implementation
+- **Current Deployment:** Scalable for residential complexes, educational institutions, and hospitals.
+- **Technological Stack:** Edge Computing (C++/ESP32), Backend (Python/Flask), Frontend (ES6/Glassmorphism).
+- **Data Persistence:** Lightweight CSV logging for high-performance retrieval.
+
+## Slide 6: Literature Analysis & Benchmarking
+- **Traditional Meters:** Static, manual, no alert system.
+- **Existing IoT Meters:** Cloud-only, high latency, zero control actuation.
+- **AquaSense Edge:** Low-latency local control loops with cloud synchronization.
+
+## Slide 7: The AquaSense Methodology
+- **Rigorous Design Lifecycle:**
+  - Problem Analysis -> Structural UML Modeling -> Behavioral Logic Implementation -> Hardware Benchmarking -> Full-Stack Integration -> Field Validation.
+- **Phased Execution:** Adhering to the DKTE Engineering Report standards.
+
+## Slide 8: System Architecture (Tiered Model)
+- **Tier 1 (Edge):** ESP32, YF-S201, HC-SR04, SG90.
+- **Tier 2 (Logic):** Python Flask REST Gateway.
+- **Tier 3 (Analytics):** Dynamic Web UI & Telegram Bot API.
+- *[System Architecture Diagram]*
+
+## Slide 9: Deployment Topology
+- **Edge-to-Cloud Pipeline:** Local Wi-Fi Mesh -> Central Gateway -> Remote Monitoring.
+- **Reliability:** Local fail-safe modes (Manual Override) ensure zero-down water availability.
+- *[Deployment Diagram]*
+
+## Slide 10: Hardware Specification (BOM)
+- **Computing Unit:** ESP32 (Dual-core, Wi-Fi/BT).
+- **Flow Ingestion:** YF-S201 Hall Effect Sensor.
+- **Proximity/Level:** HC-SR04 Ultrasonic (1cm resolution).
+- **Control Actuation:** SG90 Micro Servo for valve throttling.
+- **Notification Interface:** 16x2 I2C LCD for local status.

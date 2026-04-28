@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AquaSense | Premium Digital Showcase</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
+</head>
+<body>
+    <div class="bg-glow glow-1"></div>
+    <div class="bg-glow glow-2"></div>
+
+    <!-- Section 1: Hero -->
+    <section class="section" id="hero">
+        <div class="glass-card" data-aos="fade-up">
+            <span class="badge">Innovation Cluster 2026</span>
+            <h1 class="hero-title">AquaSense</h1>
+            <p class="hero-subtitle">An intelligent IoT ecosystem for high-precision water telemetry and autonomous resource management.</p>
+            <div style="display: flex; gap: 40px; margin-top: 40px; flex-wrap: wrap;">
+                <div>
+                    <h4 style="color: var(--accent-blue);">Lead Engineer</h4>
+                    <p>Shreyash Chougule</p>
+                </div>
+                <div>
+                    <h4 style="color: var(--accent-blue);">System Architect</h4>
+                    <p>Krish Mahajan</p>
+                </div>
+                <div>
+                    <h4 style="color: var(--accent-blue);">Hardware Lead</h4>
+                    <p>Pranav Chougule</p>
+                </div>
+                <div>
+                    <h4 style="color: var(--accent-blue);">UI/UX Designer</h4>
+                    <p>Varad Dake</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Section 2: Abstract & Problem -->
+    <section class="section" id="abstract">
+        <div class="grid-2">
+            <div class="glass-card" data-aos="fade-right">
+                <h2 class="section-title">The Challenge</h2>
+                <p>40% of urban water supply is lost to non-revenue leaks and overflows. AquaSense bridges the gap between raw data and actionable conservation, transforming passive plumbing into an active intelligence node.</p>
+            </div>
+            <div style="display: grid; gap: 20px;">
+                <div class="feature-item" data-aos="fade-left">
+                    <h3>Strategic Objectives</h3>
+                    <ul style="list-style: none; margin-top: 10px;">
+                        <li>• Precision Telemetry (99% Accuracy)</li>
+                        <li>• Autonomous Valve Actuation</li>
+                        <li>• AI-Driven Anomaly Detection</li>
+                        <li>• Unified Digital Dashboard</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Section 3: Architecture Deep Dive -->
+    <section class="section" id="architecture">
+        <h2 class="section-title" data-aos="fade-up">System Architecture</h2>
+        <div class="grid-2">
+            <div class="diagram-container" data-aos="zoom-in">
+                <!-- Using Fig 3.1 -->
+                <img src="assets/architecture dia.png" alt="Architecture Diagram">
+            </div>
+            <div class="glass-card" data-aos="fade-left">
+                <h3>Tiered Modular Model</h3>
+                <p style="margin-top: 20px;">A decoupled four-layer framework ensuring high horizontal scalability and fault tolerance.</p>
+                <ul style="list-style: none; display: grid; gap: 15px; margin-top: 20px;">
+                    <li><strong>Perception:</strong> ESP32 + Heterogeneous Sensor Array</li>
+                    <li><strong>Logic:</strong> Python Flask REST Gateway</li>
+                    <li><strong>Analytics:</strong> Real-time Chart.js Telemetry</li>
+                    <li><strong>Response:</strong> SG90 Servo Actuation</li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <!-- Section 4: Hardware BOM -->
+    <section class="section" id="hardware">
+        <div class="glass-card" data-aos="fade-up">
+            <h2 class="section-title">Hardware Specification</h2>
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 30px;">
+                <div class="feature-item">
+                    <h4 style="color: var(--accent-blue);">ESP32 Core</h4>
+                    <p>Dual-core processing with integrated Wi-Fi mesh support.</p>
+                </div>
+                <div class="feature-item">
+                    <h4 style="color: var(--accent-blue);">YF-S201 Flow</h4>
+                    <p>Hall effect sensor for high-frequency pulse counting.</p>
+                </div>
+                <div class="feature-item">
+                    <h4 style="color: var(--accent-blue);">HC-SR04 Sonic</h4>
+                    <p>Centimeter-level precision for real-time tank profiling.</p>
+                </div>
+                <div class="feature-item">
+                    <h4 style="color: var(--accent-blue);">SG90 Actuator</h4>
+                    <p>Micro-servo for proportional valve throttling.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Section 5: UML Modeling Gallery -->
+    <section class="section" id="uml">
+        <h2 class="section-title" data-aos="fade-up">Technical Modeling</h2>
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(400px, 1fr)); gap: 30px;">
+            <div class="glass-card" data-aos="fade-up">
+                <h4>Behavioral: Use Case</h4>
+                <div class="diagram-container" style="margin-top: 15px; height: 250px;">
+                    <img src="assets/usecase.jpeg" alt="Use Case">
+                </div>
+            </div>
+            <div class="glass-card" data-aos="fade-up" data-aos-delay="100">
+                <h4>Structural: Class Model</h4>
+                <div class="diagram-container" style="margin-top: 15px; height: 250px;">
+                    <img src="assets/class diagram.jpeg" alt="Class Diagram">
+                </div>
+            </div>
+            <div class="glass-card" data-aos="fade-up" data-aos-delay="200">
+                <h4>Dynamic: Sequence</h4>
+                <div class="diagram-container" style="margin-top: 15px; height: 250px;">
+                    <img src="assets/Sequence.png" alt="Sequence Diagram">
+                </div>
+            </div>
+            <div class="glass-card" data-aos="fade-up" data-aos-delay="300">
+                <h4>Process: Activity</h4>
+                <div class="diagram-container" style="margin-top: 15px; height: 250px;">
+                    <img src="assets/Activity diagram.png" alt="Activity Diagram">
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Section 6: Data Design -->
+    <section class="section" id="data">
+        <div class="grid-2">
+            <div class="glass-card" data-aos="fade-right">
+                <h2 class="section-title">Data Integrity</h2>
+                <p>Utilizing a relational ER model to maintain consistency across multi-zone telemetry logs and historical reports.</p>
+                <div class="diagram-container" style="margin-top: 20px;">
+                    <img src="assets/Er diagram.png" alt="ER Diagram">
+                </div>
+            </div>
+            <div class="glass-card" data-aos="fade-left">
+                <h2 class="section-title">Deployment</h2>
+                <p>Distributed edge topology with cloud synchronization and local fail-safe modes.</p>
+                <div class="diagram-container" style="margin-top: 20px;">
+                    <img src="assets/deployment diagram.png" alt="Deployment Diagram">
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Section 7: Testing Results -->
+    <section class="section" id="testing">
+        <h2 class="section-title" data-aos="fade-up">Validation Benchmarks</h2>
+        <div class="glass-card" data-aos="fade-up">
+            <table style="width: 100%; border-collapse: collapse; color: var(--text-primary);">
+                <thead>
+                    <tr style="border-bottom: 1px solid var(--glass-border);">
+                        <th style="padding: 15px; text-align: left; color: var(--accent-blue);">Metric</th>
+                        <th style="padding: 15px; text-align: left; color: var(--accent-blue);">Target</th>
+                        <th style="padding: 15px; text-align: left; color: var(--accent-blue);">Actual</th>
+                        <th style="padding: 15px; text-align: left; color: var(--accent-blue);">Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr style="border-bottom: 1px solid var(--glass-border);">
+                        <td style="padding: 15px;">Wastage Reduction</td>
+                        <td style="padding: 15px;">>30%</td>
+                        <td style="padding: 15px;">35.4%</td>
+                        <td style="padding: 15px; color: #00ff88;">OPTIMAL</td>
+                    </tr>
+                    <tr style="border-bottom: 1px solid var(--glass-border);">
+                        <td style="padding: 15px;">Alert Latency</td>
+                        <td style="padding: 15px;"><5s</td>
+                        <td style="padding: 15px;">1.2s</td>
+                        <td style="padding: 15px; color: #00ff88;">OPTIMAL</td>
+                    </tr>
+                    <tr style="border-bottom: 1px solid var(--glass-border);">
+                        <td style="padding: 15px;">Sensor Variance</td>
+                        <td style="padding: 15px;"><5%</td>
+                        <td style="padding: 15px;">0.8%</td>
+                        <td style="padding: 15px; color: #00ff88;">OPTIMAL</td>
+                    </tr>
+                    <tr>
+                        <td style="padding: 15px;">System Uptime</td>
+                        <td style="padding: 15px;">99%</td>
+                        <td style="padding: 15px;">100%</td>
+                        <td style="padding: 15px; color: #00ff88;">OPTIMAL</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </section>
+
+    <!-- Section 8: Conclusion -->
+    <section class="section" id="outro" style="text-align: center;">
+        <div data-aos="zoom-in">
+            <h1 class="hero-title">Engineering Excellence</h1>
+            <p class="hero-subtitle" style="margin: 0 auto 40px;">AquaSense is more than a monitoring system; it's a paradigm shift in sustainable resource management.</p>
+            <div class="badge">CSE Dept | DKTE University | 2026</div>
+        </div>
+    </section>
+
+    <div class="nav">
+        <div class="nav-dot active" onclick="scrollToSection('hero')"></div>
+        <div class="nav-dot" onclick="scrollToSection('abstract')"></div>
+        <div class="nav-dot" onclick="scrollToSection('architecture')"></div>
+        <div class="nav-dot" onclick="scrollToSection('hardware')"></div>
+        <div class="nav-dot" onclick="scrollToSection('uml')"></div>
+        <div class="nav-dot" onclick="scrollToSection('data')"></div>
+        <div class="nav-dot" onclick="scrollToSection('testing')"></div>
+        <div class="nav-dot" onclick="scrollToSection('outro')"></div>
+    </div>
+
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script>
+        AOS.init({ duration: 1000, once: true });
+        lucide.createIcons();
+        function scrollToSection(id) { document.getElementById(id).scrollIntoView({ behavior: 'smooth' }); }
+        window.addEventListener('scroll', () => {
+            const sections = ['hero', 'abstract', 'architecture', 'hardware', 'uml', 'data', 'testing', 'outro'];
+            const dots = document.querySelectorAll('.nav-dot');
+            sections.forEach((id, index) => {
+                const rect = document.getElementById(id).getBoundingClientRect();
+                if (rect.top >= -window.innerHeight / 2 && rect.top <= window.innerHeight / 2) {
+                    dots.forEach(dot => dot.classList.remove('active'));
+                    dots[index].classList.add('active');
+                }
+            });
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,50 @@
+# AquaSense: Technical Design & UML Visualization
+
+## Slide 11: Behavioral Design: Use Case Model
+- **Stakeholders:** System Admin, Area User, Autonomous Agent.
+- **Interactions:** Configuration, Monitoring, Alert Response, and System Overrides.
+- *[Use Case Diagram]*
+
+## Slide 12: Structural Design: Class Architecture
+- **OOP Core:** `AreaController`, `TelemetryParser`, `DataPersistenceManager`.
+- **Encapsulation:** Hardware-agnostic logic ensures the system can scale to other sensor brands effortlessly.
+- *[Class Diagram]*
+
+## Slide 13: Structural Design: Object Snapshot
+- **Live Context:** Snapshot of active objects (Kitchen_Node, Bathroom_Node) during a high-consumption event.
+- **State Validation:** Cross-referencing object properties with physical sensor readings.
+- *[Object Diagram]*
+
+## Slide 14: Data Flow Analysis (Level 0: Context)
+- **External Entities:** Admin Console, Physical Sensors, Notification Services.
+- **Process 0:** The AquaSense Core Engine.
+- *[Context Diagram]*
+
+## Slide 15: Data Flow Analysis (Level 1: Detail)
+- **Sub-Processes:** Telemetry validation -> Threshold Comparison -> Actuator Signaling -> Dashboard Update.
+- **Data Stores:** Historical Logs (CSV), Current System State.
+- *[Level 1 DFD]*
+
+## Slide 16: Entity-Relationship Modeling
+- **Relational Integrity:** Connecting area-specific logs to global system settings and user accounts.
+- **Normalisation:** Ensuring data consistency across long-term telemetry storage.
+- *[ER Diagram]*
+
+## Slide 17: Dynamic Modeling: Sequence Analysis
+- **Lifecycle of a Leak:** Sensor Detect -> Interrupt Trigger -> Backend POST -> Alert Dissemination -> Valve Shutdown.
+- **Latency Profile:** <500ms from edge detection to dashboard update.
+- *[Sequence Diagram]*
+
+## Slide 18: Dynamic Modeling: Collaboration
+- **Message Exchange:** Visualizing how the `AlertService` and `PersistenceService` work in parallel to handle critical events.
+- *[Collaboration Diagram]*
+
+## Slide 19: Process Logic: Activity Diagram
+- **Decision Trees:** Automated "Throttling" vs. "Full Cutoff" based on tank criticality (20% threshold).
+- **Loop Control:** Continuous sampling vs. low-power standby modes.
+- *[Activity Diagram]*
+
+## Slide 20: State-Space Modeling: State-Chart
+- **Operational States:** `BOOT`, `IDLE`, `ACTIVE_FLOW`, `CONSERVATION_MODE`, `CRITICAL_ALARM`.
+- **Transition Logic:** Event-based state switching with built-in hysteresis.
+- *[State-Chart Diagram]*
