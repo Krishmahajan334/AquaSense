@@ -38,6 +38,26 @@ if FIRESTORE_AVAILABLE:
         print(f"⚠️ Firestore initialization skipped: {e}")
         db = None
 
+def get_config():
+    """Helper to get config from Firestore with local fallback."""
+    # Try Firestore
+    if db:
+        try:
+            doc = db.collection('config').document('settings').get()
+            if doc.exists:
+                return doc.to_dict()
+        except Exception as e:
+            print(f"Firestore config read error: {e}")
+
+    # Fallback to local file
+    if os.path.exists(CONFIG_FILE):
+        try:
+            with open(CONFIG_FILE, 'r') as f:
+                return json.load(f)
+        except Exception as e:
+            print(f"Error reading local config: {e}")
+    return {}
+
 def log_to_history(data):
     timestamp = datetime.now()
     log_entry = {
@@ -182,27 +202,31 @@ def telegram_polling_loop():
     last_update_id = 0
     while True:
         try:
-            if os.path.exists(CONFIG_FILE):
-                with open(CONFIG_FILE, 'r') as f:
-                    config = json.load(f)
-                bot_token = config.get('telegram_bot_token')
-                allowed_chat_id = config.get('telegram_chat_id')
+            config = get_config()
+            bot_token = config.get('telegram_bot_token')
+            allowed_chat_id = config.get('telegram_chat_id')
+            
+            # Update area names if they changed in config
+            if 'areas' in config:
+                for aid, name in config['areas'].items():
+                    if aid in system_data['areas']:
+                        system_data['areas'][aid]['name'] = name
+
+            if bot_token and allowed_chat_id:
+                url = f"https://api.telegram.org/bot{bot_token}/getUpdates?offset={last_update_id + 1}&timeout=5"
+                req = urllib.request.Request(url)
+                response = urllib.request.urlopen(req, timeout=10)
+                data = json.loads(response.read().decode('utf-8'))
                 
-                if bot_token and allowed_chat_id:
-                    url = f"https://api.telegram.org/bot{bot_token}/getUpdates?offset={last_update_id + 1}&timeout=5"
-                    req = urllib.request.Request(url)
-                    response = urllib.request.urlopen(req, timeout=10)
-                    data = json.loads(response.read().decode('utf-8'))
-                    
-                    if data.get('ok') and data.get('result'):
-                        for update in data['result']:
-                            last_update_id = update['update_id']
-                            message = update.get('message', {})
-                            text = message.get('text', '').strip()
-                            chat_id = str(message.get('chat', {}).get('id', ''))
-                            
-                            if chat_id == str(allowed_chat_id) and text.startswith('/'):
-                                handle_telegram_command(text, chat_id)
+                if data.get('ok') and data.get('result'):
+                    for update in data['result']:
+                        last_update_id = update['update_id']
+                        message = update.get('message', {})
+                        text = message.get('text', '').strip()
+                        chat_id = str(message.get('chat', {}).get('id', ''))
+                        
+                        if chat_id == str(allowed_chat_id) and text.startswith('/'):
+                            handle_telegram_command(text, chat_id)
         except Exception as e:
             pass # Ignore timeout/connection errors
         time.sleep(2)
@@ -492,14 +516,26 @@ def get_daily_report():
 @app.route('/api/admin/config', methods=['GET', 'POST'])
 def handle_config():
     if request.method == 'GET':
-        if os.path.exists(CONFIG_FILE):
-            with open(CONFIG_FILE, 'r') as f:
-                return jsonify(json.load(f))
-        return jsonify({})
+        config = get_config()
+        return jsonify(config)
     else:
         data = request.json
-        with open(CONFIG_FILE, 'w') as f:
-            json.dump(data, f)
+        
+        # Save to Firestore
+        if db:
+            try:
+                db.collection('config').document('settings').set(data)
+                print("✅ Config saved to Firestore.")
+            except Exception as e:
+                print(f"Firestore config save error: {e}")
+        
+        # Save to local file as backup
+        try:
+            with open(CONFIG_FILE, 'w') as f:
+                json.dump(data, f)
+        except Exception as e:
+            print(f"Local config save error: {e}")
+            
         return jsonify({"status": "success"})
 
 @app.route('/api/admin/test-telegram', methods=['POST'])
