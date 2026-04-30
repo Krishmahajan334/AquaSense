@@ -1,5 +1,6 @@
 from flask import Flask, jsonify, request, send_from_directory
 import os
+import random
 import socket
 import csv
 import time
@@ -558,6 +559,66 @@ def toggle_control():
             if 'valve' in data:
                 system_data["areas"][area_id]["valve_open"] = bool(data['valve'])
     return jsonify({"status": "success", "areas": system_data["areas"]})
+    
+def cloud_simulator_loop():
+    """Background thread that simulates hardware data when running in the cloud."""
+    print("🚀 Cloud Hardware Simulator Started.")
+    while True:
+        try:
+            # Replicate C++ logic
+            base_in = 20.0
+            base_k = 3.0
+            base_b = 6.0
+            base_g = 8.0
+            
+            # Simple fluctuations
+            cur_in = base_in + random.uniform(-2.0, 2.0)
+            cur_k = base_k + random.uniform(-1.0, 1.0)
+            cur_b = base_b + random.uniform(-2.0, 2.0)
+            cur_g = base_g + random.uniform(-1.5, 1.5)
+            
+            # Simulate Municipal Water Cut (every ~10 mins for 30s)
+            now_sec = int(time.time())
+            if (now_sec // 600) % 2 == 0 and (now_sec % 600) < 30:
+                cur_in = 0.0
+            
+            # Update global system_data
+            global system_data
+            system_data['main_input_flow'] = round(cur_in, 2)
+            
+            # Areas
+            total_out = 0.0
+            for area_id, flow in zip(['kitchen', 'bathroom', 'garden'], [cur_k, cur_b, cur_g]):
+                if system_data["areas"][area_id]["valve_open"]:
+                    raw_flow = flow
+                    aeration = system_data["areas"][area_id]["aeration"]
+                    
+                    # Apply aeration logic (simplified for sim)
+                    saved_ratio = aeration / 100.0
+                    actual_flow = raw_flow * (1.0 - (saved_ratio * 0.8)) # max 80% reduction
+                    
+                    system_data["areas"][area_id]["flow_rate"] = round(actual_flow, 2)
+                    system_data["areas"][area_id]["water_usage"] += actual_flow * (5/60) # 5s interval -> min
+                    system_data["total_water_saved"] += (raw_flow - actual_flow) * (5/60)
+                    total_out += actual_flow
+                else:
+                    system_data["areas"][area_id]["flow_rate"] = 0.0
+            
+            system_data["total_output_flow"] = round(total_out, 2)
+            system_data["total_water_usage"] = sum(a["water_usage"] for a in system_data["areas"].values())
+            
+            # Tank level
+            net_flow = system_data['main_input_flow'] - system_data['total_output_flow']
+            system_data['tank_level'] += net_flow * 0.05
+            system_data['tank_level'] = max(0.0, min(100.0, system_data['tank_level']))
+            
+            # Log to History/Firestore
+            log_to_history(system_data)
+            
+        except Exception as e:
+            print(f"Cloud Simulator Error: {e}")
+            
+        time.sleep(5) # Update every 5 seconds
 
 if __name__ == '__main__':
     # Get port from environment variable (default to 5050 for local dev)
@@ -567,9 +628,16 @@ if __name__ == '__main__':
     # In Flask dev mode (debug=True), the reloader starts a second process.
     # We check WERKZEUG_RUN_MAIN to ensure the thread only starts in the main worker.
     if os.environ.get("WERKZEUG_RUN_MAIN") == "true" or not app.debug:
-        t = threading.Thread(target=telegram_polling_loop, daemon=True)
-        t.start()
+        # Start telegram polling thread
+        t_bot = threading.Thread(target=telegram_polling_loop, daemon=True)
+        t_bot.start()
         print("Starting Telegram polling thread...")
+        
+        # Start cloud simulator thread automatically on Render
+        if os.environ.get("RENDER"):
+            t_sim = threading.Thread(target=cloud_simulator_loop, daemon=True)
+            t_sim.start()
+            print("Starting Background Cloud Simulator...")
         
     ip = get_local_ip()
     print("\n" + "="*50)
