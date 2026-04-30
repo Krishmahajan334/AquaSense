@@ -428,6 +428,14 @@ function closeModal() {
     document.getElementById('control-modal').style.display = 'none';
 }
 
+// Close modal when clicking outside (backdrop)
+window.addEventListener('click', (event) => {
+    const modal = document.getElementById('control-modal');
+    if (event.target == modal) {
+        closeModal();
+    }
+});
+
 function updateModalAerationLabel(val) {
     document.getElementById('modal-aeration-label').textContent = `${val}%`;
 }

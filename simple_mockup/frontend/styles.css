@@ -99,23 +99,23 @@ input:checked + .slider:before { transform: translateX(20px); }
 .pulse { animation: pulse 2s infinite; }
 @keyframes pulse { 0% { box-shadow: 0 0 0 0 currentColor; } 70% { box-shadow: 0 0 0 10px transparent; } 100% { box-shadow: 0 0 0 0 transparent; } }
 
-.stats-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1.5rem; }
+.stats-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 0.75rem; }
 .stat-card {
     background-color: var(--sidebar-bg); border: 1px solid var(--border);
-    border-radius: 16px; padding: 1.5rem; display: flex; align-items: center; gap: 1.2rem;
+    border-radius: 12px; padding: 0.75rem; display: flex; align-items: center; gap: 0.8rem;
 }
 .card-icon {
-    width: 60px; height: 60px; border-radius: 12px;
-    display: flex; align-items: center; justify-content: center; font-size: 28px;
+    width: 38px; height: 38px; border-radius: 8px;
+    display: flex; align-items: center; justify-content: center; font-size: 18px;
 }
 .card-icon.blue { background-color: rgba(59, 130, 246, 0.15); color: var(--primary); }
 .card-icon.cyan { background-color: rgba(6, 182, 212, 0.15); color: #06b6d4; }
 .card-icon.primary { background-color: rgba(139, 92, 246, 0.15); color: #8b5cf6; }
 .card-icon.success { background-color: rgba(16, 185, 129, 0.15); color: var(--success); }
 .card-icon.danger { background-color: rgba(239, 68, 68, 0.15); color: var(--danger); }
-.card-info .label { color: var(--text-muted); font-size: 0.9rem; }
-.card-info .value { font-size: 1.8rem; font-weight: 600; }
-.card-info .unit { font-size: 1rem; color: var(--text-muted); font-weight: 400; }
+.card-info .label { color: var(--text-muted); font-size: 0.7rem; line-height: 1; margin-bottom: 2px; }
+.card-info .value { font-size: 1.1rem; font-weight: 600; line-height: 1.2; }
+.card-info .unit { font-size: 0.75rem; color: var(--text-muted); font-weight: 400; }
 
 .suggestions-banner {
     background: linear-gradient(90deg, rgba(59, 130, 246, 0.1), rgba(139, 92, 246, 0.1));

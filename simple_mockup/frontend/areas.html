@@ -35,6 +35,14 @@
                     <ion-icon name="search-outline"></ion-icon>
                     <input type="text" placeholder="Search areas...">
                 </div>
+                <!-- Auto Mode Toggle -->
+                <div class="auto-mode-switch">
+                    <span>Auto Mode</span>
+                    <label class="switch">
+                      <input type="checkbox" id="auto-mode-toggle">
+                      <span class="slider round"></span>
+                    </label>
+                </div>
                 <div class="user-profile">
                     <div class="notification-bell">
                         <ion-icon name="notifications-outline"></ion-icon>
@@ -52,38 +60,155 @@
                     </div>
                 </div>
 
+                <!-- Interactive Pipeline Schema Section -->
+                <div class="visual-card schema-card" style="margin-bottom: 2rem;">
+                    <div class="panel-header">
+                        <h3>Interactive System Infrastructure</h3>
+                        <p class="text-muted" style="font-size: 0.8rem;">Live monitoring of flow distribution across all sectors.</p>
+                    </div>
+                    <div class="schema-container">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 400" id="pipeline-svg">
+                            <!-- Background Grid -->
+                            <defs>
+                                <pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse">
+                                    <path d="M 40 0 L 0 0 0 40" fill="none" stroke="rgba(255,255,255,0.03)" stroke-width="0.5"/>
+                                </pattern>
+                            </defs>
+                            <rect width="100%" height="100%" fill="url(#grid)" />
+
+                            <!-- Main Input Pipe -->
+                            <path id="pipe-input" d="M 400,0 L 400,60" class="pipe" />
+                            <path id="pipe-input-ref" d="M 400,0 L 400,60" class="pipe-ref" />
+                            <path id="pipe-input-ref-2" d="M 400,0 L 400,60" class="pipe-ref-2" />
+                            <path id="pipe-input-ref-3" d="M 400,0 L 400,60" class="pipe-ref-3" />
+                            
+                            <!-- Interactive Tank Node -->
+                            <foreignObject x="365" y="60" width="70" height="80">
+                                <div xmlns="http://www.w3.org/1999/xhtml" class="tank-body" style="height: 100%; width: 100%; border-radius: 8px; border: 2px solid #334155; position: relative; overflow: hidden; background: #0f172a; box-shadow: 0 0 15px rgba(0,0,0,0.5); padding: 0; margin: 0;">
+                                    <div class="tank-water" id="tank-water-fill" style="position: absolute; bottom: 0; width: 100%; height: 0%; background: linear-gradient(180deg, #38bdf8 0%, #0284c7 100%); transition: height 1s ease, background 0.5s ease;"></div>
+                                    <div class="tank-overlay" style="z-index: 2;">
+                                        <h2 id="tank-viz-text" style="color: #fff; font-size: 1rem; margin: 0; text-shadow: 0 2px 4px rgba(0,0,0,0.8);">0%</h2>
+                                    </div>
+                                </div>
+                            </foreignObject>
+                            <text x="445" y="105" class="label" style="fill: #9ca3af; font-size: 14px; font-weight: 500;">Main Tank</text>
+
+                            <!-- Output Header -->
+                            <path id="pipe-output-main" d="M 400,140 L 400,180" class="pipe" />
+                            <path id="pipe-output-main-ref" d="M 400,140 L 400,180" class="pipe-ref" />
+                            <path id="pipe-output-main-ref-2" d="M 400,140 L 400,180" class="pipe-ref-2" />
+                            <path id="pipe-output-main-ref-3" d="M 400,140 L 400,180" class="pipe-ref-3" />
+                            
+                            <!-- Branching Horizontal -->
+                            <path id="pipe-header-left" d="M 400,180 L 150,180" class="pipe" />
+                            <path id="pipe-header-left-ref" d="M 400,180 L 150,180" class="pipe-ref" />
+                            <path id="pipe-header-left-ref-2" d="M 400,180 L 150,180" class="pipe-ref-2" />
+                            <path id="pipe-header-left-ref-3" d="M 400,180 L 150,180" class="pipe-ref-3" />
+                            
+                            <path id="pipe-header-right" d="M 400,180 L 650,180" class="pipe" />
+                            <path id="pipe-header-right-ref" d="M 400,180 L 650,180" class="pipe-ref" />
+                            <path id="pipe-header-right-ref-2" d="M 400,180 L 650,180" class="pipe-ref-2" />
+                            <path id="pipe-header-right-ref-3" d="M 400,180 L 650,180" class="pipe-ref-3" />
+                            
+                            <!-- Junction Nodes -->
+                            <circle cx="150" cy="180" r="6" class="node" />
+                            <circle cx="400" cy="180" r="6" class="node" />
+                            <circle cx="650" cy="180" r="6" class="node" />
+
+                            <!-- Area Branches -->
+                            <!-- Kitchen -->
+                            <path id="pipe-kitchen-top" d="M 150,180 L 150,220" class="pipe" />
+                            <path id="pipe-kitchen-top-ref" d="M 150,180 L 150,220" class="pipe-ref" />
+                            <path id="pipe-kitchen-top-ref-2" d="M 150,180 L 150,220" class="pipe-ref-2" />
+                            <path id="pipe-kitchen-top-ref-3" d="M 150,180 L 150,220" class="pipe-ref-3" />
+                            <path id="pipe-kitchen-bottom" d="M 150,235 L 150,300" class="pipe" />
+                            <path id="pipe-kitchen-bottom-ref" d="M 150,235 L 150,300" class="pipe-ref" />
+                            <path id="pipe-kitchen-bottom-ref-2" d="M 150,235 L 150,300" class="pipe-ref-2" />
+                            <path id="pipe-kitchen-bottom-ref-3" d="M 150,235 L 150,300" class="pipe-ref-3" />
+                            <g class="valve-node" onclick="openValveControl('kitchen')" 
+                               onmousemove="showValveTooltip('kitchen', event)" 
+                               onmouseleave="hideValveTooltip()"
+                               id="node-kitchen">
+                                <rect x="135" y="220" width="30" height="15" rx="2" class="valve-rect" />
+                                <text x="110" y="210" class="label">Kitchen</text>
+                                <circle cx="150" cy="227.5" r="4" class="valve-dot" id="dot-kitchen" />
+                            </g>
+
+                            <!-- Bathroom -->
+                            <path id="pipe-bathroom-top" d="M 400,180 L 400,220" class="pipe" />
+                            <path id="pipe-bathroom-top-ref" d="M 400,180 L 400,220" class="pipe-ref" />
+                            <path id="pipe-bathroom-top-ref-2" d="M 400,180 L 400,220" class="pipe-ref-2" />
+                            <path id="pipe-bathroom-top-ref-3" d="M 400,180 L 400,220" class="pipe-ref-3" />
+                            <path id="pipe-bathroom-bottom" d="M 400,235 L 400,300" class="pipe" />
+                            <path id="pipe-bathroom-bottom-ref" d="M 400,235 L 400,300" class="pipe-ref" />
+                            <path id="pipe-bathroom-bottom-ref-2" d="M 400,235 L 400,300" class="pipe-ref-2" />
+                            <path id="pipe-bathroom-bottom-ref-3" d="M 400,235 L 400,300" class="pipe-ref-3" />
+                            <g class="valve-node" onclick="openValveControl('bathroom')" 
+                               onmousemove="showValveTooltip('bathroom', event)" 
+                               onmouseleave="hideValveTooltip()"
+                               id="node-bathroom">
+                                <rect x="385" y="220" width="30" height="15" rx="2" class="valve-rect" />
+                                <text x="360" y="210" class="label">Bathroom</text>
+                                <circle cx="400" cy="227.5" r="4" class="valve-dot" id="dot-bathroom" />
+                            </g>
+
+                            <!-- Garden -->
+                            <path id="pipe-garden-top" d="M 650,180 L 650,220" class="pipe" />
+                            <path id="pipe-garden-top-ref" d="M 650,180 L 650,220" class="pipe-ref" />
+                            <path id="pipe-garden-top-ref-2" d="M 650,180 L 650,220" class="pipe-ref-2" />
+                            <path id="pipe-garden-top-ref-3" d="M 650,180 L 650,220" class="pipe-ref-3" />
+                            <path id="pipe-garden-bottom" d="M 650,235 L 650,300" class="pipe" />
+                            <path id="pipe-garden-bottom-ref" d="M 650,235 L 650,300" class="pipe-ref" />
+                            <path id="pipe-garden-bottom-ref-2" d="M 650,235 L 650,300" class="pipe-ref-2" />
+                            <path id="pipe-garden-bottom-ref-3" d="M 650,235 L 650,300" class="pipe-ref-3" />
+                            <g class="valve-node" onclick="openValveControl('garden')" 
+                               onmousemove="showValveTooltip('garden', event)" 
+                               onmouseleave="hideValveTooltip()"
+                               id="node-garden">
+                                <rect x="635" y="220" width="30" height="15" rx="2" class="valve-rect" />
+                                <text x="610" y="210" class="label">Garden</text>
+                                <circle cx="650" cy="227.5" r="4" class="valve-dot" id="dot-garden" />
+                            </g>
+                        </svg>
+                    </div>
+                </div>
+
                 <!-- Areas Management Grid -->
                 <div class="areas-grid" style="grid-template-columns: 1fr;">
                     
-                    <!-- Kitchen Detailed Section -->
-                    <div class="visual-card" style="padding: 1.5rem; margin-bottom: 2rem;">
-                        <div class="area-header" style="border-bottom: 1px solid var(--border); padding-bottom: 1rem; margin-bottom: 1.5rem;">
-                            <div style="display: flex; align-items: center; gap: 1rem;">
-                                <div class="card-icon blue" style="width: 50px; height: 50px; font-size: 24px;">
-                                    <ion-icon name="restaurant-outline"></ion-icon>
-                                </div>
-                                <div>
-                                    <h2 style="font-size: 1.4rem;">Kitchen Sector</h2>
-                                    <p class="text-muted" style="font-size: 0.9rem;">Primary indoor high-usage area</p>
-                                </div>
+                    <!-- Area: Kitchen -->
+                    <div class="visual-card" id="area-kitchen">
+                        <div class="area-header" style="margin-bottom: 1.5rem; display: flex; justify-content: space-between; align-items: flex-start;">
+                            <div>
+                                <h2 style="margin: 0; font-size: 1.5rem;">Kitchen</h2>
+                                <p class="text-muted" style="margin: 0; font-size: 0.9rem;">Food Preparation & Dining Area</p>
                             </div>
                             <div class="valve-indicator open" id="detail-ind-kitchen">Valve: OPEN</div>
                         </div>
                         
-                        <div class="stats-grid" style="grid-template-columns: repeat(3, 1fr); margin-bottom: 2rem;">
-                            <div class="stat-card" style="background: rgba(255,255,255,0.02);">
+                        <div class="stats-grid" style="grid-template-columns: repeat(3, 1fr); margin-bottom: 2rem; gap: 0.75rem;">
+                            <div class="stat-card">
+                                <div class="card-icon cyan">
+                                    <ion-icon name="speedometer-outline"></ion-icon>
+                                </div>
                                 <div class="card-info">
                                     <p class="label">Current Flow</p>
                                     <h3 class="value"><span id="flow-kitchen">0.0</span> <small class="unit">L/m</small></h3>
                                 </div>
                             </div>
-                            <div class="stat-card" style="background: rgba(255,255,255,0.02);">
+                            <div class="stat-card">
+                                <div class="card-icon blue">
+                                    <ion-icon name="water-outline"></ion-icon>
+                                </div>
                                 <div class="card-info">
                                     <p class="label">Total Consumption</p>
                                     <h3 class="value"><span id="usage-kitchen">0.0</span> <small class="unit">L</small></h3>
                                 </div>
                             </div>
-                            <div class="stat-card" style="background: rgba(255,255,255,0.02);">
+                            <div class="stat-card">
+                                <div class="card-icon success">
+                                    <ion-icon name="leaf-outline"></ion-icon>
+                                </div>
                                 <div class="card-info">
                                     <p class="label">Aeration Savings</p>
                                     <h3 class="value" style="color: var(--success);"><span id="saved-kitchen">0.0</span> <small class="unit">L</small></h3>
@@ -108,35 +233,39 @@
                         </div>
                     </div>
 
-                    <!-- Bathroom Detailed Section -->
-                    <div class="visual-card" style="padding: 1.5rem; margin-bottom: 2rem;">
-                        <div class="area-header" style="border-bottom: 1px solid var(--border); padding-bottom: 1rem; margin-bottom: 1.5rem;">
-                            <div style="display: flex; align-items: center; gap: 1rem;">
-                                <div class="card-icon blue" style="width: 50px; height: 50px; font-size: 24px; background-color: rgba(139, 92, 246, 0.15); color: #8b5cf6;">
-                                    <ion-icon name="water-outline"></ion-icon>
-                                </div>
-                                <div>
-                                    <h2 style="font-size: 1.4rem;">Bathroom Sector</h2>
-                                    <p class="text-muted" style="font-size: 0.9rem;">Multi-fixture grooming and hygiene</p>
-                                </div>
+                    <!-- Area: Bathroom -->
+                    <div class="visual-card" id="area-bathroom">
+                        <div class="area-header" style="margin-bottom: 1.5rem; display: flex; justify-content: space-between; align-items: flex-start;">
+                            <div>
+                                <h2 style="margin: 0; font-size: 1.5rem;">Bathroom</h2>
+                                <p class="text-muted" style="margin: 0; font-size: 0.9rem;">Main Restroom & Utilities</p>
                             </div>
                             <div class="valve-indicator open" id="detail-ind-bathroom">Valve: OPEN</div>
                         </div>
                         
-                        <div class="stats-grid" style="grid-template-columns: repeat(3, 1fr); margin-bottom: 2rem;">
-                            <div class="stat-card" style="background: rgba(255,255,255,0.02);">
+                        <div class="stats-grid" style="grid-template-columns: repeat(3, 1fr); margin-bottom: 2rem; gap: 0.75rem;">
+                            <div class="stat-card">
+                                <div class="card-icon cyan">
+                                    <ion-icon name="speedometer-outline"></ion-icon>
+                                </div>
                                 <div class="card-info">
                                     <p class="label">Current Flow</p>
                                     <h3 class="value"><span id="flow-bathroom">0.0</span> <small class="unit">L/m</small></h3>
                                 </div>
                             </div>
-                            <div class="stat-card" style="background: rgba(255,255,255,0.02);">
+                            <div class="stat-card">
+                                <div class="card-icon primary">
+                                    <ion-icon name="water-outline"></ion-icon>
+                                </div>
                                 <div class="card-info">
                                     <p class="label">Total Consumption</p>
                                     <h3 class="value"><span id="usage-bathroom">0.0</span> <small class="unit">L</small></h3>
                                 </div>
                             </div>
-                            <div class="stat-card" style="background: rgba(255,255,255,0.02);">
+                            <div class="stat-card">
+                                <div class="card-icon success">
+                                    <ion-icon name="leaf-outline"></ion-icon>
+                                </div>
                                 <div class="card-info">
                                     <p class="label">Aeration Savings</p>
                                     <h3 class="value" style="color: var(--success);"><span id="saved-bathroom">0.0</span> <small class="unit">L</small></h3>
@@ -160,35 +289,39 @@
                         </div>
                     </div>
 
-                    <!-- Garden Detailed Section -->
-                    <div class="visual-card" style="padding: 1.5rem; margin-bottom: 2rem;">
-                        <div class="area-header" style="border-bottom: 1px solid var(--border); padding-bottom: 1rem; margin-bottom: 1.5rem;">
-                            <div style="display: flex; align-items: center; gap: 1rem;">
-                                <div class="card-icon blue" style="width: 50px; height: 50px; font-size: 24px; background-color: rgba(16, 185, 129, 0.15); color: var(--success);">
-                                    <ion-icon name="leaf-outline"></ion-icon>
-                                </div>
-                                <div>
-                                    <h2 style="font-size: 1.4rem;">Garden / Plantation</h2>
-                                    <p class="text-muted" style="font-size: 0.9rem;">Outdoor irrigation and landscape</p>
-                                </div>
+                    <!-- Area: Garden -->
+                    <div class="visual-card" id="area-garden">
+                        <div class="area-header" style="margin-bottom: 1.5rem; display: flex; justify-content: space-between; align-items: flex-start;">
+                            <div>
+                                <h2 style="margin: 0; font-size: 1.5rem;">Garden</h2>
+                                <p class="text-muted" style="margin: 0; font-size: 0.9rem;">Outdoor Irrigation & Greenery</p>
                             </div>
                             <div class="valve-indicator open" id="detail-ind-garden">Valve: OPEN</div>
                         </div>
                         
-                        <div class="stats-grid" style="grid-template-columns: repeat(3, 1fr); margin-bottom: 2rem;">
-                            <div class="stat-card" style="background: rgba(255,255,255,0.02);">
+                        <div class="stats-grid" style="grid-template-columns: repeat(3, 1fr); margin-bottom: 2rem; gap: 0.75rem;">
+                            <div class="stat-card">
+                                <div class="card-icon cyan">
+                                    <ion-icon name="speedometer-outline"></ion-icon>
+                                </div>
                                 <div class="card-info">
                                     <p class="label">Current Flow</p>
                                     <h3 class="value"><span id="flow-garden">0.0</span> <small class="unit">L/m</small></h3>
                                 </div>
                             </div>
-                            <div class="stat-card" style="background: rgba(255,255,255,0.02);">
+                            <div class="stat-card">
+                                <div class="card-icon blue">
+                                    <ion-icon name="water-outline"></ion-icon>
+                                </div>
                                 <div class="card-info">
                                     <p class="label">Total Consumption</p>
                                     <h3 class="value"><span id="usage-garden">0.0</span> <small class="unit">L</small></h3>
                                 </div>
                             </div>
-                            <div class="stat-card" style="background: rgba(255,255,255,0.02);">
+                            <div class="stat-card">
+                                <div class="card-icon success">
+                                    <ion-icon name="leaf-outline"></ion-icon>
+                                </div>
                                 <div class="card-info">
                                     <p class="label">Aeration Savings</p>
                                     <h3 class="value" style="color: var(--success);"><span id="saved-garden">0.0</span> <small class="unit">L</small></h3>
@@ -216,6 +349,39 @@
 
             </div>
         </main>
+    </div>
+
+    <!-- Floating Control Modal -->
+    <div id="control-modal" class="modal-backdrop" style="display: none;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 id="modal-title">Area Control</h3>
+                <button class="close-modal" onclick="closeModal()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="stat-row">
+                    <span class="label">Live Flow Rate:</span>
+                    <span class="valueHighlight"><span id="modal-flow">0.0</span> <small>L/min</small></span>
+                </div>
+                <div class="control-group">
+                    <label>Aeration %:</label>
+                    <div class="slider-container">
+                        <input type="range" id="modal-aeration" min="0" max="100" value="0" 
+                               oninput="updateModalAerationLabel(this.value)" 
+                               onchange="saveModalAeration()">
+                        <span id="modal-aeration-label">0%</span>
+                    </div>
+                    <p class="hint">Higher aeration reduces liquid water consumption.</p>
+                </div>
+                <button id="modal-valve-btn" class="action-btn btn-full" onclick="toggleModalValve()">Toggle Valve</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="valve-tooltip" class="valve-tooltip">
+        <div class="tooltip-header" id="tt-name">Kitchen Area</div>
+        <div class="tooltip-row"><span>Flow:</span> <b id="tt-flow">0.0</b> L/m</div>
+        <div class="tooltip-row"><span>Air:</span> <b id="tt-aeration">0</b>%</div>
     </div>
 
     <script src="areas.js"></script>

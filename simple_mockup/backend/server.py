@@ -8,12 +8,56 @@ import json
 import urllib.request
 import urllib.parse
 import threading
+import ssl
+
+try:
+    from google.cloud import firestore
+    from google.api_core.exceptions import GoogleAPICallError
+    FIRESTORE_AVAILABLE = True
+except ImportError:
+    FIRESTORE_AVAILABLE = False
+
+# Bypass SSL verification for macOS Python environments
+ssl._create_default_https_context = ssl._create_unverified_context
+
 frontend_dir = os.path.join(os.path.dirname(os.path.abspath(__file__)), '../frontend')
 app = Flask(__name__, static_folder=frontend_dir, static_url_path='')
 
 HISTORY_FILE = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'history.csv')
 CONFIG_FILE = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'config.json')
+
+# Initialize Firestore Client
+db = None
+if FIRESTORE_AVAILABLE:
+    try:
+        # Implicitly uses GOOGLE_APPLICATION_CREDENTIALS or Cloud Run Service Account
+        db = firestore.Client()
+        print("✅ Firestore initialized successfully.")
+    except Exception as e:
+        print(f"⚠️ Firestore initialization skipped: {e}")
+        db = None
+
 def log_to_history(data):
+    timestamp = datetime.now()
+    log_entry = {
+        'Timestamp': timestamp.strftime('%Y-%m-%d %H:%M:%S'),
+        'InputFlow': round(data['main_input_flow'], 2),
+        'OutputFlow': round(data['total_output_flow'], 2),
+        'TankLevel': round(data['tank_level'], 2),
+        'KitchenFlow': round(data['areas']['kitchen']['flow_rate'], 2),
+        'BathroomFlow': round(data['areas']['bathroom']['flow_rate'], 2),
+        'GardenFlow': round(data['areas']['garden']['flow_rate'], 2),
+        'WaterSaved': round(data['total_water_saved'], 2)
+    }
+
+    # Log to Firestore
+    if db:
+        try:
+            db.collection('history').add(log_entry)
+        except Exception as e:
+            print(f"Error logging to Firestore: {e}")
+
+    # Fallback/Local Log to CSV
     file_exists = os.path.isfile(HISTORY_FILE)
     with open(HISTORY_FILE, mode='a', newline='') as f:
         writer = csv.writer(f)
@@ -21,14 +65,14 @@ def log_to_history(data):
             writer.writerow(['Timestamp', 'InputFlow', 'OutputFlow', 'TankLevel', 'KitchenFlow', 'BathroomFlow', 'GardenFlow', 'WaterSaved'])
         
         writer.writerow([
-            datetime.now().strftime('%Y-%m-%d %H:%M:%S'),
-            round(data['main_input_flow'], 2),
-            round(data['total_output_flow'], 2),
-            round(data['tank_level'], 2),
-            round(data['areas']['kitchen']['flow_rate'], 2),
-            round(data['areas']['bathroom']['flow_rate'], 2),
-            round(data['areas']['garden']['flow_rate'], 2),
-            round(data['total_water_saved'], 2)
+            log_entry['Timestamp'],
+            log_entry['InputFlow'],
+            log_entry['OutputFlow'],
+            log_entry['TankLevel'],
+            log_entry['KitchenFlow'],
+            log_entry['BathroomFlow'],
+            log_entry['GardenFlow'],
+            log_entry['WaterSaved']
         ])
 
 # In-memory storage with multi-area tracking and auto_mode
@@ -279,34 +323,57 @@ def handle_data():
 
 @app.route('/api/history')
 def get_history():
+    history = []
+    
+    # Try Firestore first
+    if db:
+        try:
+            docs = db.collection('history').order_by('Timestamp', direction=firestore.Query.DESCENDING).limit(500).stream()
+            history = [doc.to_dict() for doc in docs]
+            history.reverse() # Back to chronological order
+            if history:
+                return jsonify(history)
+        except Exception as e:
+            print(f"Firestore read error: {e}")
+
+    # Fallback to CSV
     if not os.path.isfile(HISTORY_FILE):
         return jsonify([])
     
-    history = []
     try:
         with open(HISTORY_FILE, mode='r') as f:
             reader = csv.DictReader(f)
-            # Get last 500 records
             rows = list(reader)
             history = rows[-500:]
     except Exception as e:
-        print(f"Error reading history: {e}")
+        print(f"Error reading history from CSV: {e}")
         
     return jsonify(history)
 
 @app.route('/api/reports')
 def get_reports():
     granularity = request.args.get('granularity', 'hourly')
-    if not os.path.isfile(HISTORY_FILE):
+    rows = []
+
+    # Try Firestore first
+    if db:
+        try:
+            docs = db.collection('history').order_by('Timestamp').stream()
+            rows = [doc.to_dict() for doc in docs]
+        except Exception as e:
+            print(f"Firestore report error: {e}")
+
+    # Fallback to CSV if Firestore is empty or unavailable
+    if not rows and os.path.isfile(HISTORY_FILE):
+        try:
+            with open(HISTORY_FILE, mode='r') as f:
+                reader = csv.DictReader(f)
+                rows = list(reader)
+        except Exception as e:
+            print(f"CSV report error: {e}")
+
+    if not rows:
         return jsonify([])
-    
-    try:
-        with open(HISTORY_FILE, mode='r') as f:
-            reader = csv.DictReader(f)
-            rows = list(reader)
-            
-        if not rows:
-            return jsonify([])
 
         aggregated = {}
         for row in rows:
@@ -358,16 +425,31 @@ def get_reports():
 @app.route('/api/daily-report')
 def get_daily_report():
     date_str = request.args.get('date', datetime.now().strftime('%Y-%m-%d'))
-    if not os.path.isfile(HISTORY_FILE):
-        return jsonify({"error": "No history available"}), 404
-        
-    try:
-        with open(HISTORY_FILE, mode='r') as f:
-            reader = csv.DictReader(f)
-            rows = [row for row in reader if row['Timestamp'].startswith(date_str)]
-            
-        if not rows:
-            return jsonify({"error": "No data for this date"}), 404
+    rows = []
+
+    # Try Firestore first
+    if db:
+        try:
+            # Query for documents starting with date_str
+            docs = db.collection('history') \
+                     .where('Timestamp', '>=', date_str) \
+                     .where('Timestamp', '<', date_str + '\uf8ff') \
+                     .order_by('Timestamp').stream()
+            rows = [doc.to_dict() for doc in docs]
+        except Exception as e:
+            print(f"Firestore daily report error: {e}")
+
+    # Fallback to CSV
+    if not rows and os.path.isfile(HISTORY_FILE):
+        try:
+            with open(HISTORY_FILE, mode='r') as f:
+                reader = csv.DictReader(f)
+                rows = [row for row in reader if row['Timestamp'].startswith(date_str)]
+        except Exception as e:
+            print(f"CSV daily report error: {e}")
+
+    if not rows:
+        return jsonify({"error": "No data for this date"}), 404
             
         # Calculate start availability and end availability
         start_tank_level = float(rows[0]['TankLevel'])
@@ -475,16 +557,24 @@ def toggle_control():
     return jsonify({"status": "success", "areas": system_data["areas"]})
 
 if __name__ == '__main__':
-    # Start telegram polling thread in the worker process
-    if os.environ.get("WERKZEUG_RUN_MAIN") == "true":
+    # Get port from environment variable (default to 5050 for local dev)
+    port = int(os.environ.get("PORT", 5050))
+    
+    # Start telegram polling thread
+    # In Flask dev mode (debug=True), the reloader starts a second process.
+    # We check WERKZEUG_RUN_MAIN to ensure the thread only starts in the main worker.
+    if os.environ.get("WERKZEUG_RUN_MAIN") == "true" or not app.debug:
         t = threading.Thread(target=telegram_polling_loop, daemon=True)
         t.start()
+        print("Starting Telegram polling thread...")
         
     ip = get_local_ip()
     print("\n" + "="*50)
     print(" AQUASENSE DASHBOARD READY")
-    print(f" Local:  http://localhost:5050")
-    print(f" Mobile: http://{ip}:5050")
-    print(" (Connect phone to same WiFi)")
+    print(f" Web Access: http://localhost:{port}")
+    print(f" Mobile:     http://{ip}:{port}")
     print("="*50 + "\n")
-    app.run(host='0.0.0.0', port=5050, debug=True)
+    
+    # Run the app. debug=False is safer for production.
+    # Change to debug=True if you need to see errors during development.
+    app.run(host='0.0.0.0', port=port, debug=False)
