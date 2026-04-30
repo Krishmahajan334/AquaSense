@@ -115,6 +115,16 @@ system_data = {
     }
 }
 
+# Initialize system_data names from config
+try:
+    _cfg = get_config()
+    if 'areas' in _cfg:
+        for _aid, _name in _cfg['areas'].items():
+            if _aid in system_data['areas']:
+                system_data['areas'][_aid]['name'] = _name
+except:
+    pass
+
 def get_local_ip():
     try:
         s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
