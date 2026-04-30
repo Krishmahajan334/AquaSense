@@ -428,62 +428,64 @@ def get_daily_report():
     date_str = request.args.get('date', datetime.now().strftime('%Y-%m-%d'))
     rows = []
 
-    # Try Firestore first
-    if db:
-        try:
-            # Query for documents starting with date_str
-            docs = db.collection('history') \
-                     .where('Timestamp', '>=', date_str) \
-                     .where('Timestamp', '<', date_str + '\uf8ff') \
-                     .order_by('Timestamp').stream()
-            rows = [doc.to_dict() for doc in docs]
-        except Exception as e:
-            print(f"Firestore daily report error: {e}")
+    try:
+        # Try Firestore first
+        if db:
+            try:
+                # Query for documents starting with date_str
+                docs = db.collection('history') \
+                         .where('Timestamp', '>=', date_str) \
+                         .where('Timestamp', '<', date_str + '\uf8ff') \
+                         .order_by('Timestamp').stream()
+                rows = [doc.to_dict() for doc in docs]
+            except Exception as e:
+                print(f"Firestore daily report error: {e}")
 
-    # Fallback to CSV
-    if not rows and os.path.isfile(HISTORY_FILE):
-        try:
-            with open(HISTORY_FILE, mode='r') as f:
-                reader = csv.DictReader(f)
-                rows = [row for row in reader if row['Timestamp'].startswith(date_str)]
-        except Exception as e:
-            print(f"CSV daily report error: {e}")
+        # Fallback to CSV
+        if not rows and os.path.isfile(HISTORY_FILE):
+            try:
+                with open(HISTORY_FILE, mode='r') as f:
+                    reader = csv.DictReader(f)
+                    rows = [row for row in reader if row['Timestamp'].startswith(date_str)]
+            except Exception as e:
+                print(f"CSV daily report error: {e}")
 
-    if not rows:
-        return jsonify({"error": "No data for this date"}), 404
-            
-    # Calculate start availability and end availability
-    start_tank_level = float(rows[0]['TankLevel'])
-    end_tank_level = float(rows[-1]['TankLevel'])
-    
-    # Calculate totals
-    total_input = sum(float(r['InputFlow']) for r in rows) / max(1, len(rows)) * len(rows) # approx total flow assuming readings are uniform
-    total_output = sum(float(r['OutputFlow']) for r in rows) / max(1, len(rows)) * len(rows)
-    
-    total_kitchen = sum(float(r.get('KitchenFlow', 0)) for r in rows) / max(1, len(rows)) * len(rows)
-    total_bathroom = sum(float(r.get('BathroomFlow', 0)) for r in rows) / max(1, len(rows)) * len(rows)
-    total_garden = sum(float(r.get('GardenFlow', 0)) for r in rows) / max(1, len(rows)) * len(rows)
-    
-    return jsonify({
-        "date": date_str,
-        "start_availability": round(start_tank_level, 2),
-        "end_availability": round(end_tank_level, 2),
-        "total_input": round(total_input, 2),
-        "total_output": round(total_output, 2),
-        "areas": {
-            "kitchen": round(total_kitchen, 2),
-            "bathroom": round(total_bathroom, 2),
-            "garden": round(total_garden, 2)
-        },
-        "hourly_trend": [
-            {
-                "hour": r['Timestamp'].split(' ')[1][:2],
-                "tank_level": float(r['TankLevel']),
-                "total_output": float(r['OutputFlow'])
-            } for r in rows[::max(1, len(rows)//24)] # Sample ~24 points
-        ]
-    })
+        if not rows:
+            return jsonify({"error": "No data for this date"}), 404
+                
+        # Calculate start availability and end availability
+        start_tank_level = float(rows[0]['TankLevel'])
+        end_tank_level = float(rows[-1]['TankLevel'])
+        
+        # Calculate totals
+        total_input = sum(float(r['InputFlow']) for r in rows) / max(1, len(rows)) * len(rows) # approx total flow assuming readings are uniform
+        total_output = sum(float(r['OutputFlow']) for r in rows) / max(1, len(rows)) * len(rows)
+        
+        total_kitchen = sum(float(r.get('KitchenFlow', 0)) for r in rows) / max(1, len(rows)) * len(rows)
+        total_bathroom = sum(float(r.get('BathroomFlow', 0)) for r in rows) / max(1, len(rows)) * len(rows)
+        total_garden = sum(float(r.get('GardenFlow', 0)) for r in rows) / max(1, len(rows)) * len(rows)
+        
+        return jsonify({
+            "date": date_str,
+            "start_availability": round(start_tank_level, 2),
+            "end_availability": round(end_tank_level, 2),
+            "total_input": round(total_input, 2),
+            "total_output": round(total_output, 2),
+            "areas": {
+                "kitchen": round(total_kitchen, 2),
+                "bathroom": round(total_bathroom, 2),
+                "garden": round(total_garden, 2)
+            },
+            "hourly_trend": [
+                {
+                    "hour": r['Timestamp'].split(' ')[1][:2],
+                    "tank_level": float(r['TankLevel']),
+                    "total_output": float(r['OutputFlow'])
+                } for r in rows[::max(1, len(rows)//24)] # Sample ~24 points
+            ]
+        })
     except Exception as e:
+        print(f"Daily report error: {e}")
         return jsonify({"error": str(e)}), 500
 
 @app.route('/api/admin/config', methods=['GET', 'POST'])
