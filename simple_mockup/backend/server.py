@@ -355,25 +355,26 @@ def get_reports():
     granularity = request.args.get('granularity', 'hourly')
     rows = []
 
-    # Try Firestore first
-    if db:
-        try:
-            docs = db.collection('history').order_by('Timestamp').stream()
-            rows = [doc.to_dict() for doc in docs]
-        except Exception as e:
-            print(f"Firestore report error: {e}")
+    try:
+        # Try Firestore first
+        if db:
+            try:
+                docs = db.collection('history').order_by('Timestamp').stream()
+                rows = [doc.to_dict() for doc in docs]
+            except Exception as e:
+                print(f"Firestore report error: {e}")
 
-    # Fallback to CSV if Firestore is empty or unavailable
-    if not rows and os.path.isfile(HISTORY_FILE):
-        try:
-            with open(HISTORY_FILE, mode='r') as f:
-                reader = csv.DictReader(f)
-                rows = list(reader)
-        except Exception as e:
-            print(f"CSV report error: {e}")
+        # Fallback to CSV if Firestore is empty or unavailable
+        if not rows and os.path.isfile(HISTORY_FILE):
+            try:
+                with open(HISTORY_FILE, mode='r') as f:
+                    reader = csv.DictReader(f)
+                    rows = list(reader)
+            except Exception as e:
+                print(f"CSV report error: {e}")
 
-    if not rows:
-        return jsonify([])
+        if not rows:
+            return jsonify([])
 
         aggregated = {}
         for row in rows:
@@ -451,37 +452,37 @@ def get_daily_report():
     if not rows:
         return jsonify({"error": "No data for this date"}), 404
             
-        # Calculate start availability and end availability
-        start_tank_level = float(rows[0]['TankLevel'])
-        end_tank_level = float(rows[-1]['TankLevel'])
-        
-        # Calculate totals
-        total_input = sum(float(r['InputFlow']) for r in rows) / max(1, len(rows)) * len(rows) # approx total flow assuming readings are uniform
-        total_output = sum(float(r['OutputFlow']) for r in rows) / max(1, len(rows)) * len(rows)
-        
-        total_kitchen = sum(float(r.get('KitchenFlow', 0)) for r in rows) / max(1, len(rows)) * len(rows)
-        total_bathroom = sum(float(r.get('BathroomFlow', 0)) for r in rows) / max(1, len(rows)) * len(rows)
-        total_garden = sum(float(r.get('GardenFlow', 0)) for r in rows) / max(1, len(rows)) * len(rows)
-        
-        return jsonify({
-            "date": date_str,
-            "start_availability": round(start_tank_level, 2),
-            "end_availability": round(end_tank_level, 2),
-            "total_input": round(total_input, 2),
-            "total_output": round(total_output, 2),
-            "areas": {
-                "kitchen": round(total_kitchen, 2),
-                "bathroom": round(total_bathroom, 2),
-                "garden": round(total_garden, 2)
-            },
-            "hourly_trend": [
-                {
-                    "hour": r['Timestamp'].split(' ')[1][:2],
-                    "tank_level": float(r['TankLevel']),
-                    "total_output": float(r['OutputFlow'])
-                } for r in rows[::max(1, len(rows)//24)] # Sample ~24 points
-            ]
-        })
+    # Calculate start availability and end availability
+    start_tank_level = float(rows[0]['TankLevel'])
+    end_tank_level = float(rows[-1]['TankLevel'])
+    
+    # Calculate totals
+    total_input = sum(float(r['InputFlow']) for r in rows) / max(1, len(rows)) * len(rows) # approx total flow assuming readings are uniform
+    total_output = sum(float(r['OutputFlow']) for r in rows) / max(1, len(rows)) * len(rows)
+    
+    total_kitchen = sum(float(r.get('KitchenFlow', 0)) for r in rows) / max(1, len(rows)) * len(rows)
+    total_bathroom = sum(float(r.get('BathroomFlow', 0)) for r in rows) / max(1, len(rows)) * len(rows)
+    total_garden = sum(float(r.get('GardenFlow', 0)) for r in rows) / max(1, len(rows)) * len(rows)
+    
+    return jsonify({
+        "date": date_str,
+        "start_availability": round(start_tank_level, 2),
+        "end_availability": round(end_tank_level, 2),
+        "total_input": round(total_input, 2),
+        "total_output": round(total_output, 2),
+        "areas": {
+            "kitchen": round(total_kitchen, 2),
+            "bathroom": round(total_bathroom, 2),
+            "garden": round(total_garden, 2)
+        },
+        "hourly_trend": [
+            {
+                "hour": r['Timestamp'].split(' ')[1][:2],
+                "tank_level": float(r['TankLevel']),
+                "total_output": float(r['OutputFlow'])
+            } for r in rows[::max(1, len(rows)//24)] # Sample ~24 points
+        ]
+    })
     except Exception as e:
         return jsonify({"error": str(e)}), 500
 
