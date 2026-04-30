@@ -628,6 +628,16 @@ def cloud_simulator_loop():
             if (now_sec // 600) % 2 == 0 and (now_sec % 600) < 30:
                 cur_in = 0.0
             
+            # Randomly simulate an anomaly (Leak/High Flow)
+            # 3% chance for Bathroom, 2% for Garden
+            rand_anomaly = random.randint(0, 100)
+            if rand_anomaly < 3:
+                cur_b += 10.0
+                add_alert("⚠️ High flow detected in Bathroom! Possible leak.")
+            elif 3 <= rand_anomaly < 5:
+                cur_g += 15.0
+                add_alert("⚠️ High flow detected in Garden! Pipe burst?")
+
             # Update global system_data
             global system_data
             system_data['main_input_flow'] = round(cur_in, 2)
