@@ -551,6 +551,12 @@ input:checked + .slider:before { transform: translateX(20px); }
     
     .auto-mode-switch span { display: none; }
     .auto-mode-switch { padding: 0.5rem; }
+
+    /* SVG Scaling Fixes */
+    #pipeline-svg foreignObject {
+        transform: scale(1.2);
+        transform-origin: center top;
+    }
 }
 
 /* =========================================
