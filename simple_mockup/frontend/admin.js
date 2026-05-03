@@ -110,6 +110,29 @@ async function resetSystemData() {
 window.onload = () => {
     loadConfig();
     
+    // Login UI Enhancements
+    const loginOverlay = document.getElementById('login-overlay');
+    const loginCard = document.getElementById('login-card');
+    const userInput = document.getElementById('admin-user');
+    const passInput = document.getElementById('admin-pass');
+
+    if (userInput && passInput) {
+        const handleEnter = (e) => {
+            if (e.key === 'Enter') adminLogin();
+        };
+        userInput.addEventListener('keypress', handleEnter);
+        passInput.addEventListener('keypress', handleEnter);
+    }
+
+    if (loginOverlay && loginCard) {
+        loginOverlay.addEventListener('mousedown', (e) => {
+            // If click is outside the login card and overlay is visible
+            if (!loginCard.contains(e.target) && loginOverlay.style.display !== 'none') {
+                window.location.href = 'index.html';
+            }
+        });
+    }
+    
     // Mobile Sidebar Logic
     const menuToggle = document.getElementById('menu-toggle');
     const sidebar = document.getElementById('sidebar');
