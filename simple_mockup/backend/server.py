@@ -263,10 +263,10 @@ def generate_suggestions():
         suggestions.append("System is optimized. Flow rates are within normal limits.")
     system_data['suggestions'] = suggestions
 
-# Define paths for additional static resources
-presentation_dir = os.path.join(os.path.dirname(os.path.abspath(__file__)), '../../demo_presentation')
-diagrams_dir = os.path.join(os.path.dirname(os.path.abspath(__file__)), '../../Diagrams')
-outputs_dir = os.path.join(os.path.dirname(os.path.abspath(__file__)), '../../Outputs')
+# Define paths for additional static resources (moved to simple_mockup folder)
+presentation_dir = os.path.join(os.path.dirname(os.path.abspath(__file__)), '../demo_presentation')
+diagrams_dir = os.path.join(os.path.dirname(os.path.abspath(__file__)), '../Diagrams')
+outputs_dir = os.path.join(os.path.dirname(os.path.abspath(__file__)), '../Outputs')
 
 @app.route('/')
 def serve_index():
