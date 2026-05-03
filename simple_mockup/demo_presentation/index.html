@@ -1,0 +1,906 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+    <title>AquaSense | Smart Water Monitoring</title>
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.3.1/reset.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.3.1/reveal.min.css">
+    <!-- Dark theme base -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.3.1/theme/black.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <!-- Print PDF Support -->
+    <script>
+        var link = document.createElement( 'link' );
+        link.rel = 'stylesheet';
+        link.type = 'text/css';
+        link.href = window.location.search.match( /print-pdf/gi ) ? 'https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.3.1/print/pdf.min.css' : 'https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.3.1/print/paper.min.css';
+        document.getElementsByTagName( 'head' )[0].appendChild( link );
+    </script>
+
+    <style>
+        /* Modern SaaS / Glassmorphism Theme Overrides */
+        :root {
+            --primary-cyan: #00f0ff;
+            --primary-blue: #3b82f6;
+        }
+        
+        body {
+            background: #0f172a;
+        }
+
+        .reveal-viewport {
+            background: url('assets/tech_water_bg.png') no-repeat center center fixed !important;
+            background-size: cover !important;
+        }
+
+        .reveal {
+            background: rgba(8, 12, 22, 0.6) !important; /* Lighter overlay so the background image is visible */
+            backdrop-filter: blur(5px);
+            font-family: 'Inter', -apple-system, sans-serif;
+            color: #f8fafc;
+        }
+
+        .reveal h1, .reveal h2, .reveal h3, .reveal h4 {
+            font-family: 'Outfit', sans-serif;
+            text-transform: none;
+            font-weight: 700;
+        }
+
+        .reveal h2 {
+            color: var(--primary-cyan);
+            margin-bottom: 20px;
+            font-size: 2em;
+            letter-spacing: -0.02em;
+        }
+
+        .gradient-text {
+            background: linear-gradient(90deg, var(--primary-cyan), var(--primary-blue));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-weight: 800;
+        }
+
+        /* Glassmorphism Cards */
+        .glass-card {
+            background: rgba(30, 41, 59, 0.4);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 15px;
+            padding: 20px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.4);
+            margin: 10px auto;
+            transition: transform 0.3s ease;
+        }
+        
+        .glass-card:hover {
+            border-color: rgba(0, 240, 255, 0.3);
+            box-shadow: 0 10px 40px rgba(0, 240, 255, 0.1);
+        }
+
+        .title-card {
+            background: rgba(15, 23, 42, 0.6);
+            padding: 50px !important;
+            border-radius: 20px;
+            border: 1px solid rgba(0, 240, 255, 0.2);
+            display: inline-block;
+        }
+
+        .grid-2 {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            text-align: left;
+        }
+        
+        .grid-3 {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 15px;
+        }
+
+        .reveal ul {
+            display: block;
+            margin-left: 1.5em;
+        }
+
+        .reveal li {
+            margin-bottom: 10px;
+            font-size: 0.8em;
+            color: #cbd5e1;
+            line-height: 1.4;
+        }
+        
+        .icon-box {
+            font-size: 2em;
+            color: var(--primary-cyan);
+            margin-bottom: 10px;
+            text-shadow: 0 0 20px rgba(0, 240, 255, 0.4);
+        }
+
+        /* Diagrams Zoom Wrapper */
+        .diagram-zoom-wrapper {
+            width: 100%;
+            height: 720px;
+            border-radius: 12px;
+            border: 2px solid rgba(0, 240, 255, 0.2) !important;
+            box-shadow: 0 0 30px rgba(0, 0, 0, 0.5) !important;
+            background: white; 
+            overflow: hidden;
+            position: relative;
+        }
+
+        .diagram-img {
+            max-width: 100%;
+            max-height: 100%;
+            object-fit: contain;
+            display: block;
+            margin: auto;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+
+        /* Outputs Wrapper */
+        .output-img-preview {
+            max-width: 80vw !important;
+            max-height: 40vh !important;
+            width: auto;
+            height: auto;
+            object-fit: contain;
+            border-radius: 12px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 15px 35px rgba(0,0,0,0.5);
+            display: block;
+            margin: 0 auto;
+        }
+
+        .scrollable-output {
+            width: 100%;
+            height: 720px; /* Maximize vertical space utilization */
+            overflow-y: auto;
+            overflow-x: hidden;
+            border-radius: 12px;
+            background: transparent;
+            margin-top: 20px;
+        }
+        
+        .scrollable-output::-webkit-scrollbar {
+            width: 8px;
+        }
+        .scrollable-output::-webkit-scrollbar-thumb {
+            background: var(--primary-cyan);
+            border-radius: 4px;
+        }
+
+        /* Testing Tables */
+        .testing-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 15px;
+            font-size: 0.45em; /* Smaller font to fit table data */
+            color: #e2e8f0;
+            text-align: left;
+        }
+        .testing-table th {
+            background: rgba(0, 240, 255, 0.1);
+            color: var(--primary-cyan);
+            padding: 12px 15px;
+            border-bottom: 2px solid rgba(0, 240, 255, 0.3);
+            font-weight: 600;
+        }
+        .testing-table td {
+            padding: 12px 15px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            vertical-align: middle;
+        }
+        .testing-table tr:last-child td {
+            border-bottom: none;
+        }
+        .pass-badge {
+            background: rgba(16, 185, 129, 0.2);
+            color: #10b981;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-weight: bold;
+            font-size: 0.9em;
+            display: inline-block;
+        }
+        
+        .reveal .controls { color: var(--primary-cyan); }
+        .reveal .progress { color: var(--primary-blue); height: 5px; }
+        .reveal .progress span { background: linear-gradient(90deg, var(--primary-cyan), var(--primary-blue)); }
+        
+        .highlight { color: var(--primary-cyan); font-weight: 600; }
+        
+        /* Fix cutting off by scaling properly */
+        .reveal .slides {
+            text-align: center;
+        }
+
+        /* Slide numbers */
+        .reveal .slide-number {
+            background: transparent;
+            color: var(--primary-cyan);
+            font-size: 24px;
+            font-weight: bold;
+            text-shadow: 0 0 10px rgba(0, 0, 0, 0.8);
+        }
+
+        /* Translucent Dark Box for all normal slides */
+        .reveal .slides > section:not([data-background-image]) {
+            background: rgba(10, 15, 25, 0.75) !important;
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border-radius: 24px;
+            padding: 40px !important;
+            border: 1px solid rgba(0, 240, 255, 0.15);
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.7);
+            box-sizing: border-box;
+        }
+
+        /* Make sure inner cards don't have too much redundant background now */
+        .glass-card {
+            background: rgba(255, 255, 255, 0.03);
+            box-shadow: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="reveal">
+        <div class="slides">
+
+            <!-- 1. Title Slide -->
+            <section data-background-image="assets/image1.jpg" data-background-opacity="0.3">
+                <div class="glass-card title-card">
+                    <h1 class="gradient-text" style="font-size: 3.5em; margin-bottom: 20px;"><i class="fa-solid fa-droplet"></i> AquaSense</h1>
+                    <h3 style="font-weight: 400; letter-spacing: 2px; color: #e2e8f0;">Smart Water Monitoring System</h3>
+                    <p style="font-size: 0.6em; color: #94a3b8; margin-top: 20px; margin-bottom: 30px;">
+                        D.K.T.E. Society’s Textile and Engineering Institute, Ichalkaranji
+                    </p>
+                    
+                    <div style="margin-top: 50px; font-size: 0.65em; color: #cbd5e1; text-align: center; border-top: 1px solid rgba(255,255,255,0.1); padding-top: 25px;">
+                        <p>Under Guidance of <strong style="color: var(--primary-cyan); font-size: 1.1em; letter-spacing: 1px;">V.V. Kheradkar</strong> &nbsp;&nbsp;|&nbsp;&nbsp; Department of Computer Science & Engineering</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 2. Team Slide -->
+            <section>
+                <h2>Team</h2>
+                <div class="glass-card" style="display: inline-block; padding: 40px 60px; text-align: left;">
+                    <table style="color: #cbd5e1; font-size: 1.1em; line-height: 2.2; border-collapse: collapse;">
+                        <tr>
+                            <td style="padding-right: 60px; border-bottom: 1px solid rgba(255,255,255,0.1);"><strong>MR. Krish Mahajan</strong></td>
+                            <td style="color: var(--primary-cyan); border-bottom: 1px solid rgba(255,255,255,0.1);">24UCS056</td>
+                        </tr>
+                        <tr>
+                            <td style="padding-right: 60px; border-bottom: 1px solid rgba(255,255,255,0.1);"><strong>MR. Shreyash Chougule</strong></td>
+                            <td style="color: var(--primary-cyan); border-bottom: 1px solid rgba(255,255,255,0.1);">24UCS023</td>
+                        </tr>
+                        <tr>
+                            <td style="padding-right: 60px; border-bottom: 1px solid rgba(255,255,255,0.1);"><strong>MR. Pranav Chougule</strong></td>
+                            <td style="color: var(--primary-cyan); border-bottom: 1px solid rgba(255,255,255,0.1);">24UCS021</td>
+                        </tr>
+                        <tr>
+                            <td style="padding-right: 60px;"><strong>MR. Varad Dake</strong></td>
+                            <td style="color: var(--primary-cyan);">24UCS024</td>
+                        </tr>
+                    </table>
+                </div>
+            </section>
+
+            <!-- 3. Problem Statement -->
+            <section>
+                <h2>The Challenge</h2>
+                <div class="grid-2">
+                    <div class="glass-card">
+                        <i class="fa-solid fa-faucet-drip icon-box"></i>
+                        <h4>Excessive Wastage</h4>
+                        <p style="font-size: 0.6em; color: #94a3b8;">Unregulated consumption in shared environments leads to massive resource depletion.</p>
+                    </div>
+                    <div class="glass-card">
+                        <i class="fa-solid fa-eye-slash icon-box"></i>
+                        <h4>Blind Spots</h4>
+                        <p style="font-size: 0.6em; color: #94a3b8;">Manual monitoring provides delayed insights, making proactive management impossible.</p>
+                    </div>
+                    <div class="glass-card">
+                        <i class="fa-solid fa-chart-pie icon-box"></i>
+                        <h4>No Zonal Tracking</h4>
+                        <p style="font-size: 0.6em; color: #94a3b8;">Inability to identify specific high-consumption areas.</p>
+                    </div>
+                    <div class="glass-card">
+                        <i class="fa-solid fa-water icon-box"></i>
+                        <h4>Overflow Crises</h4>
+                        <p style="font-size: 0.6em; color: #94a3b8;">Lack of automated leveling results in frequent, damaging tank overflows.</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 4. Aim & Objectives -->
+            <section>
+                <h2>Strategic Objectives</h2>
+                <div class="glass-card" style="text-align: left; padding: 30px;">
+                    <ul>
+                        <li style="font-size: 1.1em; color: #f8fafc;"><span class="highlight">Core Aim:</span> Engineer a comprehensive, IoT-based smart water monitoring ecosystem.</li>
+                        <hr style="border-color: rgba(255,255,255,0.1); margin: 15px 0;">
+                        <li>Deploy multi-node flow sensors for independent <span class="highlight">area-wise consumption</span> profiling.</li>
+                        <li>Implement a robust backend to parse <span class="highlight">real-time telemetry</span> for tank levels and flow rates.</li>
+                        <li>Construct an <span class="highlight">automated actuation layer</span> utilizing servo-controlled valves to mitigate overflow.</li>
+                        <li>Deliver actionable insights via a modern <span class="highlight">SaaS-style live dashboard</span>.</li>
+                    </ul>
+                </div>
+            </section>
+
+            <!-- 5. Existing vs Proposed -->
+            <section>
+                <h2>Paradigm Shift</h2>
+                <div class="grid-2">
+                    <div class="glass-card" style="border-top: 4px solid #ef4444;">
+                        <h4 style="color: #ef4444;">Legacy Systems</h4>
+                        <ul>
+                            <li><i class="fa-solid fa-xmark" style="color: #ef4444;"></i> Manual checks and outdated ledgers</li>
+                            <li><i class="fa-solid fa-xmark" style="color: #ef4444;"></i> Aggregated data (no zonal granularity)</li>
+                            <li><i class="fa-solid fa-xmark" style="color: #ef4444;"></i> Post-incident overflow detection</li>
+                            <li><i class="fa-solid fa-xmark" style="color: #ef4444;"></i> Zero automated motor actuation</li>
+                        </ul>
+                    </div>
+                    <div class="glass-card" style="border-top: 4px solid var(--primary-cyan);">
+                        <h4 class="gradient-text">AquaSense</h4>
+                        <ul>
+                            <li><i class="fa-solid fa-check" style="color: var(--primary-cyan);"></i> Autonomous IoT data pipelines</li>
+                            <li><i class="fa-solid fa-check" style="color: var(--primary-cyan);"></i> Granular, multi-area analytics</li>
+                            <li><i class="fa-solid fa-check" style="color: var(--primary-cyan);"></i> Pre-emptive anomaly alerts</li>
+                            <li><i class="fa-solid fa-check" style="color: var(--primary-cyan);"></i> Intelligent Auto-Mode</li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 6. Working Flow -->
+            <section>
+                <h2>Data & Actuation Pipeline</h2>
+                <div class="glass-card" style="text-align: left; padding: 30px;">
+                    <div style="display: flex; flex-direction: column; gap: 15px;">
+                        <div><strong class="highlight">1. Sense:</strong> Physical metrics captured via YF-S201 flow sensors and Ultrasonic depth sensors.</div>
+                        <div><strong class="highlight">2. Process:</strong> Edge processing handled by ESP32/ESP8266 to sanitize raw signals.</div>
+                        <div><strong class="highlight">3. Transmit:</strong> JSON payloads dispatched to the Flask backend via high-speed Wi-Fi.</div>
+                        <div><strong class="highlight">4. Analyze:</strong> Rules engine evaluates consumption vectors and isolates anomalies.</div>
+                        <div><strong class="highlight">5. Actuate:</strong> WebSocket dashboard updates, servos auto-correct flow, and Telegram triggers webhook alerts.</div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 7. Core Modules -->
+            <section>
+                <h2>Core Architecture Modules</h2>
+                <div class="grid-3">
+                    <div class="glass-card" style="padding: 15px;">
+                        <i class="fa-solid fa-microchip icon-box" style="font-size: 1.2em;"></i>
+                        <h4 style="font-size: 0.8em;">Sensor Simulator</h4>
+                        <p style="font-size: 0.55em; color: #94a3b8;">Virtualizes telemetry for rigorous software stress-testing without hardware bounds.</p>
+                    </div>
+                    <div class="glass-card" style="padding: 15px;">
+                        <i class="fa-solid fa-server icon-box" style="font-size: 1.2em; color: var(--primary-blue);"></i>
+                        <h4 style="font-size: 0.8em;">Telemetry Engine</h4>
+                        <p style="font-size: 0.55em; color: #94a3b8;">Flask-powered backend handling concurrent I/O from multiple edge nodes.</p>
+                    </div>
+                    <div class="glass-card" style="padding: 15px;">
+                        <i class="fa-solid fa-wind icon-box" style="font-size: 1.2em;"></i>
+                        <h4 style="font-size: 0.8em;">Adaptive Aeration</h4>
+                        <p style="font-size: 0.55em; color: #94a3b8;">Dynamic logic optimizing water oxygenation based on reservoir latency.</p>
+                    </div>
+                    <div class="glass-card" style="padding: 15px;">
+                        <i class="fa-solid fa-triangle-exclamation icon-box" style="font-size: 1.2em; color: var(--primary-blue);"></i>
+                        <h4 style="font-size: 0.8em;">Anomaly Detection</h4>
+                        <p style="font-size: 0.55em; color: #94a3b8;">Algorithmic identification of deviations indicating pipe bursts or leaks.</p>
+                    </div>
+                    <div class="glass-card" style="padding: 15px;">
+                        <i class="fa-solid fa-desktop icon-box" style="font-size: 1.2em;"></i>
+                        <h4 style="font-size: 0.8em;">SaaS Dashboard</h4>
+                        <p style="font-size: 0.55em; color: #94a3b8;">Glassmorphism Web UI providing total observability and manual overrides.</p>
+                    </div>
+                    <div class="glass-card" style="padding: 15px;">
+                        <i class="fa-brands fa-telegram icon-box" style="font-size: 1.2em; color: var(--primary-blue);"></i>
+                        <h4 style="font-size: 0.8em;">Telegram Bot</h4>
+                        <p style="font-size: 0.55em; color: #94a3b8;">Two-way asynchronous chat ops for instant critical alerts and remote actuation.</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- DIAGRAMS SECTION -->
+
+            <section>
+                <h2>Architectural Diagram</h2>
+                <div class="diagram-zoom-wrapper">
+                    <img src="../Diagrams/architecture dia.png" class="diagram-img" alt="Architectural Diagram">
+                </div>
+            </section>
+
+            <section>
+                <h2>Use case Diagram</h2>
+                <div class="diagram-zoom-wrapper">
+                    <img src="../Diagrams/usecase.jpeg" class="diagram-img" alt="Use case Diagram">
+                </div>
+            </section>
+
+            <section>
+                <h2>Dataflow Diagram</h2>
+                <div class="diagram-zoom-wrapper">
+                    <img src="../Diagrams/DFD Level 1.png" class="diagram-img" alt="Dataflow Diagram">
+                </div>
+            </section>
+
+            <section>
+                <h2>Class Diagram</h2>
+                <div class="diagram-zoom-wrapper">
+                    <img src="../Diagrams/class diagram.jpeg" class="diagram-img" alt="Class Diagram">
+                </div>
+            </section>
+
+            <section>
+                <h2>Sequence Diagram</h2>
+                <div class="diagram-zoom-wrapper">
+                    <img src="../Diagrams/Sequence.png" class="diagram-img" alt="Sequence Diagram">
+                </div>
+            </section>
+
+            <!-- Full Activity Diagram -->
+            <section>
+                <h2>Activity Diagram (Full View)</h2>
+                <div class="diagram-zoom-wrapper">
+                    <img src="../Diagrams/Activity diagram.png" class="diagram-img" alt="Activity Diagram Full">
+                </div>
+            </section>
+
+            <!-- Cropped Activity Diagrams -->
+            <section>
+                <h2>Activity Diagram (Part 1/3)</h2>
+                <div class="diagram-zoom-wrapper">
+                    <img src="assets/Activity_1.png" class="diagram-img" alt="Activity Diagram Top">
+                </div>
+            </section>
+
+            <section>
+                <h2>Activity Diagram (Part 2/3)</h2>
+                <div class="diagram-zoom-wrapper">
+                    <img src="assets/Activity_2.png" class="diagram-img" alt="Activity Diagram Middle">
+                </div>
+            </section>
+
+            <section>
+                <h2>Activity Diagram (Part 3/3)</h2>
+                <div class="diagram-zoom-wrapper">
+                    <img src="assets/Activity_3.png" class="diagram-img" alt="Activity Diagram Bottom">
+                </div>
+            </section>
+
+            <!-- Integration Testing Section -->
+            <section>
+                <h2>Integration Testing</h2>
+                <div class="glass-card" style="padding: 20px;">
+                    <table class="testing-table">
+                        <thead>
+                            <tr>
+                                <th>Test ID</th>
+                                <th>Interface</th>
+                                <th>Test Scenario</th>
+                                <th>Input Data</th>
+                                <th>Expected Outcome</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>IT-01</td>
+                                <td>C++ -> Flask</td>
+                                <td>Sensor Data Ingestion</td>
+                                <td>JSON: {"main_flow": 10.0}</td>
+                                <td>HTTP 200 OK; Backend data updated</td>
+                                <td><span class="pass-badge">Pass</span></td>
+                            </tr>
+                            <tr>
+                                <td>IT-02</td>
+                                <td>Flask -> CSV</td>
+                                <td>Persistence Validation</td>
+                                <td>Data Update Event</td>
+                                <td>File history.csv size increases</td>
+                                <td><span class="pass-badge">Pass</span></td>
+                            </tr>
+                            <tr>
+                                <td>IT-03</td>
+                                <td>Flask -> JS</td>
+                                <td>API Data Retrieval</td>
+                                <td>GET /api/data</td>
+                                <td>Valid JSON received by frontend</td>
+                                <td><span class="pass-badge">Pass</span></td>
+                            </tr>
+                            <tr>
+                                <td>IT-04</td>
+                                <td>Flask -> Telegram</td>
+                                <td>Alert Notification</td>
+                                <td>Critical Leak Trigger</td>
+                                <td>Push notification received on mobile</td>
+                                <td><span class="pass-badge">Pass</span></td>
+                            </tr>
+                            <tr>
+                                <td>IT-05</td>
+                                <td>Telegram -> Flask</td>
+                                <td>Remote Command</td>
+                                <td>/area control kitchen valve off</td>
+                                <td>Kitchen valve status set to False</td>
+                                <td><span class="pass-badge">Pass</span></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
+            <!-- Unit Testing Section -->
+            <section>
+                <h2>Unit Testing</h2>
+                <div class="glass-card" style="padding: 20px;">
+                    <table class="testing-table">
+                        <thead>
+                            <tr>
+                                <th>Test ID</th>
+                                <th>Component</th>
+                                <th>Test Scenario</th>
+                                <th>Input Data</th>
+                                <th>Expected Outcome</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>UT-01</td>
+                                <td>Python Backend</td>
+                                <td>Aeration Scaling Logic</td>
+                                <td>tank_level = 10%</td>
+                                <td>Aeration set to 90%</td>
+                                <td><span class="pass-badge">Pass</span></td>
+                            </tr>
+                            <tr>
+                                <td>UT-02</td>
+                                <td>Python Backend</td>
+                                <td>CSV Logging Function</td>
+                                <td>system_data object</td>
+                                <td>Row appended to history.csv</td>
+                                <td><span class="pass-badge">Pass</span></td>
+                            </tr>
+                            <tr>
+                                <td>UT-03</td>
+                                <td>C++ Simulator</td>
+                                <td>Random Flow Gen</td>
+                                <td>Base flow = 5.0</td>
+                                <td>Output within 10% variance</td>
+                                <td><span class="pass-badge">Pass</span></td>
+                            </tr>
+                            <tr>
+                                <td>UT-04</td>
+                                <td>JS Frontend</td>
+                                <td>Unit Conversion</td>
+                                <td>Value: 1000ml</td>
+                                <td>Display: "1.0 L"</td>
+                                <td><span class="pass-badge">Pass</span></td>
+                            </tr>
+                            <tr>
+                                <td>UT-05</td>
+                                <td>Python Backend</td>
+                                <td>Alert Trigger Logic</td>
+                                <td>Flow > 12.0 L/m</td>
+                                <td>"High Flow" alert string generated</td>
+                                <td><span class="pass-badge">Pass</span></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
+            <!-- System Testing Section -->
+            <section>
+                <h2>System Testing (End-to-End)</h2>
+                <div class="glass-card" style="padding: 20px;">
+                    <table class="testing-table">
+                        <thead>
+                            <tr>
+                                <th>Test ID</th>
+                                <th>Scenario Description</th>
+                                <th>Input/Trigger</th>
+                                <th>Expected System Response</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>ST-01</td>
+                                <td>Normal Operation</td>
+                                <td>Valid Sensor Data</td>
+                                <td>Dashboard updates every 2s; Charts reflect live usage.</td>
+                                <td><span class="pass-badge">Pass</span></td>
+                            </tr>
+                            <tr>
+                                <td>ST-02</td>
+                                <td>Critical Tank Level</td>
+                                <td>Level &lt; 20%</td>
+                                <td>Auto-Mode triggers; Flow restricted; Critical alert sent.</td>
+                                <td><span class="pass-badge">Pass</span></td>
+                            </tr>
+                            <tr>
+                                <td>ST-03</td>
+                                <td>Leak Detection</td>
+                                <td>Flow > 14 L/m</td>
+                                <td>"High Flow Anomaly" alert; Valve automatically capped at 20%.</td>
+                                <td><span class="pass-badge">Pass</span></td>
+                            </tr>
+                            <tr>
+                                <td>ST-04</td>
+                                <td>Supply Cut Fallback</td>
+                                <td>main_flow = 0.0</td>
+                                <td>Dashboard shows "Water Cut"; System enters conservation.</td>
+                                <td><span class="pass-badge">Pass</span></td>
+                            </tr>
+                            <tr>
+                                <td>ST-05</td>
+                                <td>Error Resilience</td>
+                                <td>Empty POST Request</td>
+                                <td>HTTP 400 Error; Server remains stable and active.</td>
+                                <td><span class="pass-badge">Pass</span></td>
+                            </tr>
+                            <tr>
+                                <td>ST-06</td>
+                                <td>Telegram Monitoring</td>
+                                <td>/report command</td>
+                                <td>Bot replies with Tank Level, Usage, and Auto-Mode status.</td>
+                                <td><span class="pass-badge">Pass</span></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
+            <!-- Outputs Section -->
+            <section>
+                <h2 class="gradient-text" style="font-size: 3em;">System Outputs</h2>
+                <p style="color: #94a3b8;">A visual walkthrough of the executed modules.</p>
+            </section>
+
+            <section>
+                <h2>Dashboard Home View</h2>
+                <div class="scrollable-output" style="height: 720px; overflow: hidden;">
+                    <iframe src="https://aquasense-9g0t.onrender.com/" style="width: 100%; height: 100%; border: none; border-radius: 12px; background: #0f172a;" title="Live Dashboard"></iframe>
+                </div>
+                <p style="font-size: 0.5em; margin-top: 10px; color: var(--primary-cyan);"><i class="fa-solid fa-globe"></i> Live Instance: aquasense-9g0t.onrender.com</p>
+            </section>
+            
+            <section>
+                <h2>Analytics Main Console</h2>
+                <div class="scrollable-output" style="height: 720px; overflow: hidden;">
+                    <iframe src="https://aquasense-9g0t.onrender.com/analytics.html" style="width: 100%; height: 100%; border: none; border-radius: 12px; background: #0f172a;" title="Live Analytics"></iframe>
+                </div>
+                <p style="font-size: 0.5em; margin-top: 10px; color: var(--primary-blue);"><i class="fa-solid fa-chart-line"></i> Live Analytics Console</p>
+            </section>
+
+            <section>
+                <h2>Analytics Detail View</h2>
+                <div class="scrollable-output" style="height: 720px; overflow: hidden;">
+                    <iframe src="https://aquasense-9g0t.onrender.com/analytics.html?auto=report" style="width: 100%; height: 100%; border: none; border-radius: 12px; background: #0f172a;" title="Live Detailed Analytics"></iframe>
+                </div>
+                <p style="font-size: 0.5em; margin-top: 10px; color: var(--primary-blue);"><i class="fa-solid fa-file-invoice"></i> Granular Consumption Reporting</p>
+            </section>
+
+            <section>
+                <h2>Actuation Controls</h2>
+                <div class="scrollable-output" style="height: 720px; overflow: hidden;">
+                    <iframe src="https://aquasense-9g0t.onrender.com/areas.html" style="width: 100%; height: 100%; border: none; border-radius: 12px; background: #0f172a;" title="Live Controls"></iframe>
+                </div>
+                <p style="font-size: 0.5em; margin-top: 10px; color: #ef4444;"><i class="fa-solid fa-sliders"></i> Remote Actuation & Valve Control</p>
+            </section>
+
+            <section>
+                <h2>Administration Panel</h2>
+                <div class="scrollable-output" style="height: 720px; overflow: hidden;">
+                    <iframe src="https://aquasense-9g0t.onrender.com/admin.html" style="width: 100%; height: 100%; border: none; border-radius: 12px; background: #0f172a;" title="Live Admin"></iframe>
+                </div>
+                <p style="font-size: 0.5em; margin-top: 10px; color: #94a3b8;"><i class="fa-solid fa-user-shield"></i> System Configuration & API Keys</p>
+            </section>
+
+            <section>
+                <h2>Telegram Bot Integration</h2>
+                <div style="display: flex; gap: 20px; align-items: flex-start; justify-content: center; margin-top: 20px;">
+                    <div class="scrollable-output" style="flex: 0 1 auto; width: auto; margin-top: 0; padding: 0 20px;">
+                        <img src="../Outputs/4.1.png" style="max-width: 100%; width: auto; height: auto; display: block; margin: 0 auto; box-shadow: 0 10px 30px rgba(0,0,0,0.5); border-radius: 12px;" alt="Output 5">
+                    </div>
+                    <div class="scrollable-output" style="flex: 0 1 auto; width: auto; margin-top: 0; padding: 0 20px;">
+                        <img src="../Outputs/4.2.png" style="max-width: 100%; width: auto; height: auto; display: block; margin: 0 auto; box-shadow: 0 10px 30px rgba(0,0,0,0.5); border-radius: 12px;" alt="Output 6">
+                    </div>
+                </div>
+            </section>
+
+            <section>
+                <h2>Hardware Simulator Engine</h2>
+                <div class="scrollable-output">
+                    <img src="../Outputs/5.sim.png" style="max-width: 100%; width: auto; height: auto; display: block; margin: 0 auto; box-shadow: 0 10px 30px rgba(0,0,0,0.5); border-radius: 12px;" alt="Output 7">
+                </div>
+            </section>
+
+            <section>
+                <h2>Data Analysis Graph</h2>
+                <div class="scrollable-output" style="height: 720px; overflow: hidden;">
+                    <iframe src="https://aquasense-9g0t.onrender.com/analytics.html" style="width: 100%; height: 100%; border: none; border-radius: 12px; background: #0f172a;" title="Live Graph"></iframe>
+                </div>
+                <p style="font-size: 0.5em; margin-top: 10px; color: var(--primary-cyan);"><i class="fa-solid fa-microchip"></i> Algorithmic Data Synthesis</p>
+            </section>
+
+            <!-- Tech Stack -->
+            <section>
+                <h2>Technology Stack</h2>
+                <div class="grid-2">
+                    <div class="glass-card">
+                        <h4 style="color: var(--primary-cyan);"><i class="fa-solid fa-microchip"></i> Hardware Layer</h4>
+                        <ul>
+                            <li>ESP32 / ESP8266 Microcontrollers</li>
+                            <li>YF-S201 Hall-Effect Flow Sensors</li>
+                            <li>Ultrasonic Depth Sensors</li>
+                            <li>Servo-controlled Solenoid Valves</li>
+                        </ul>
+                    </div>
+                    <div class="glass-card">
+                        <h4 style="color: var(--primary-blue);"><i class="fa-solid fa-code"></i> Software Layer</h4>
+                        <ul>
+                            <li>Python / Flask REST API</li>
+                            <li>HTML5/CSS3 Glassmorphism UI</li>
+                            <li>Chart.js Analytics Visualization</li>
+                            <li>Telegram Bot API Integration</li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Results & Performance -->
+            <section>
+                <h2>System Impact</h2>
+                <div class="grid-3">
+                    <div class="glass-card" style="text-align: center; padding: 20px 10px;">
+                        <h2 class="gradient-text" style="margin-bottom: 5px; font-size: 2.5em;">35%</h2>
+                        <p style="font-size: 0.6em; color: #94a3b8;">Max Water Savings</p>
+                    </div>
+                    <div class="glass-card" style="text-align: center; padding: 20px 10px;">
+                        <h2 class="gradient-text" style="margin-bottom: 5px; font-size: 2.5em;">1.5s</h2>
+                        <p style="font-size: 0.6em; color: #94a3b8;">Response Latency</p>
+                    </div>
+                    <div class="glass-card" style="text-align: center; padding: 20px 10px;">
+                        <h2 class="gradient-text" style="margin-bottom: 5px; font-size: 2.5em;">100%</h2>
+                        <p style="font-size: 0.6em; color: #94a3b8;">Zonal Traceability</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Live System Demo -->
+            <section>
+                <div class="glass-card title-card" style="background: rgba(15, 23, 42, 0.9);">
+                    <h2 class="gradient-text" style="font-size: 3em; margin-bottom: 20px;"><i class="fa-solid fa-desktop"></i> Live System Demo</h2>
+                    <p style="font-size: 1em; color: #cbd5e1; max-width: 800px; margin: 0 auto 30px auto; line-height: 1.6;">
+                        We will now switch over to the live <strong style="color: var(--primary-cyan);">AquaSense Dashboard</strong> to demonstrate real-time hardware telemetry, anomaly detection, and remote actuation.
+                    </p>
+                    <a href="https://aquasense-9g0t.onrender.com/" target="_blank" class="action-btn primary" style="text-decoration: none; display: inline-flex; align-items: center; gap: 10px; font-size: 1.2em; padding: 15px 30px;">
+                        <ion-icon name="globe-outline" style="font-size: 1.4em;"></ion-icon> Open Live Dashboard
+                    </a>
+                    <p style="font-size: 0.6em; color: #94a3b8; margin-top: 15px;">aquasense-9g0t.onrender.com</p>
+                </div>
+            </section>
+
+            <!-- Conclusion & Thank You -->
+            <section>
+                <div class="glass-card title-card" style="background: rgba(15, 23, 42, 0.9);">
+                    <h2 class="gradient-text" style="font-size: 2.5em; margin-bottom: 15px;">Project Conclusion</h2>
+                    <p style="font-size: 0.8em; color: #cbd5e1; margin-bottom: 30px; line-height: 1.5;">
+                        AquaSense provides a highly scalable and automated ecosystem for water management. By integrating IoT sensor nodes with a real-time analytics dashboard, the system successfully enables proactive conservation, rapid anomaly detection, and robust remote actuation.
+                    </p>
+                    <hr style="border-color: rgba(255,255,255,0.1); margin: 20px 0;">
+                    <h3 style="color: #f8fafc; font-size: 2.2em; margin-bottom: 5px;">Thank You</h3>
+                    <p style="font-size: 0.65em; color: var(--primary-cyan); letter-spacing: 2px; text-transform: uppercase; font-weight: bold;">Open for Questions & Discussion</p>
+                </div>
+            </section>
+
+        </div>
+    </div>
+
+    <button id="fs-btn" style="position: fixed; bottom: 20px; left: 20px; z-index: 9999; background: rgba(0, 240, 255, 0.15); border: 1px solid var(--primary-cyan); color: var(--primary-cyan); padding: 10px 15px; border-radius: 8px; cursor: pointer; backdrop-filter: blur(5px); transition: all 0.2s;"><i class="fa-solid fa-expand"></i> Fullscreen</button>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.3.1/reveal.min.js"></script>
+    <script>
+        Reveal.initialize({
+            hash: true,
+            width: 1440,
+            height: 900,
+            margin: 0.015,
+            minScale: 0.2,
+            maxScale: 2.0,
+            
+            // Enable slide numbers showing current/total
+            slideNumber: 'c/t',
+            
+            // Allow keyboard events (works natively with 2.4g presenter remotes)
+            keyboard: true,
+
+            transition: 'slide',
+            backgroundTransition: 'fade',
+            center: true
+        });
+
+        // Fullscreen Logic
+        const fsBtn = document.getElementById('fs-btn');
+
+        function toggleFullscreen() {
+            if (!document.fullscreenElement) {
+                document.documentElement.requestFullscreen().catch(err => {
+                    console.log(`Error attempting to enable fullscreen: ${err.message}`);
+                });
+            } else {
+                if (document.exitFullscreen) {
+                    document.exitFullscreen(); 
+                }
+            }
+        }
+
+        fsBtn.addEventListener('click', toggleFullscreen);
+
+        // Hide button when in fullscreen mode
+        document.addEventListener('fullscreenchange', () => {
+            if (document.fullscreenElement) {
+                fsBtn.style.display = 'none';
+            } else {
+                fsBtn.style.display = 'block';
+            }
+        });
+
+        // Keyboard shortcuts
+        document.addEventListener('keydown', (e) => {
+            const isMac = navigator.platform.toUpperCase().indexOf('MAC') >= 0;
+            const isCmdOrCtrl = isMac ? e.metaKey : e.ctrlKey;
+
+            // 1. Fullscreen Toggle (F5, Cmd/Ctrl+F, Cmd/Ctrl+P, or period)
+            // Maps common 'Start Slideshow' remote buttons to fullscreen.
+            // Note: Some remotes send Cmd+P for 'Start', so we map that to Fullscreen.
+            if (e.key === 'F5' || 
+                e.key === '.' || 
+                (isCmdOrCtrl && e.key.toLowerCase() === 'f') ||
+                (isCmdOrCtrl && e.key.toLowerCase() === 'p' && !e.shiftKey)) {
+                
+                e.preventDefault();
+                toggleFullscreen();
+            }
+
+            // 2. Custom PDF Print Logic (Cmd/Ctrl + SHIFT + P)
+            // Moved to Shift+P to avoid conflict with remote buttons mapping to Cmd+P
+            if (isCmdOrCtrl && e.shiftKey && e.key.toLowerCase() === 'p') {
+                e.preventDefault();
+                
+                // If already in print mode, just open the print dialog
+                if (window.location.search.match(/print-pdf/gi)) {
+                    window.print();
+                } else {
+                    // Otherwise, reload with the print-pdf query string
+                    let search = window.location.search;
+                    const separator = search ? '&' : '?';
+                    window.location.href = window.location.origin + window.location.pathname + search + separator + 'print-pdf' + window.location.hash;
+                }
+            }
+        });
+        // Keep-Alive Ping for Render Free Tier
+        function keepAlive() {
+            const url = 'https://aquasense-9g0t.onrender.com/api/data';
+            fetch(url).then(() => console.log('Keep-alive ping successful')).catch(() => console.log('Keep-alive ping failed'));
+        }
+        // Ping every 10 minutes
+        setInterval(keepAlive, 10 * 60 * 1000);
+        keepAlive(); // Initial ping
+    </script>
+</body>
+</html>
