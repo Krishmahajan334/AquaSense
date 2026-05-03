@@ -137,7 +137,7 @@
                         <p class="text-muted" style="font-size: 0.8rem;">Click on any valve node to manage area-specific settings.</p>
                     </div>
                     <div class="schema-container">
-                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 400" id="pipeline-svg">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 450" id="pipeline-svg">
                             <!-- Background Grid -->
                             <defs>
                                 <pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse">
@@ -153,91 +153,91 @@
                             <path id="pipe-input-ref-3" d="M 400,0 L 400,60" class="pipe-ref-3" />
                             
                             <!-- Interactive Tank Node -->
-                            <foreignObject x="365" y="60" width="70" height="80">
+                            <foreignObject x="355" y="60" width="90" height="100">
                                 <div xmlns="http://www.w3.org/1999/xhtml" class="tank-body" style="height: 100%; width: 100%; border-radius: 8px; border: 2px solid #334155; position: relative; overflow: hidden; background: #0f172a; box-shadow: 0 0 15px rgba(0,0,0,0.5); padding: 0; margin: 0;">
                                     <div class="tank-water" id="tank-water-fill" style="position: absolute; bottom: 0; width: 100%; height: 0%; background: linear-gradient(180deg, #38bdf8 0%, #0284c7 100%); transition: height 1s ease, background 0.5s ease;"></div>
                                     <div class="tank-overlay" style="z-index: 2;">
-                                        <h2 id="tank-viz-text" style="color: #fff; font-size: 1rem; margin: 0; text-shadow: 0 2px 4px rgba(0,0,0,0.8);">0%</h2>
+                                        <h2 id="tank-viz-text" style="color: #fff; font-size: 1.2rem; margin: 0; text-shadow: 0 2px 4px rgba(0,0,0,0.8);">0%</h2>
                                     </div>
                                 </div>
                             </foreignObject>
-                            <text x="445" y="105" class="label" style="fill: #9ca3af; font-size: 14px; font-weight: 500;">Main Tank</text>
+                            <text x="455" y="115" class="label" style="fill: #9ca3af; font-size: 14px; font-weight: 500;">Main Tank</text>
 
                             <!-- Output Header -->
-                            <path id="pipe-output-main" d="M 400,140 L 400,180" class="pipe" />
-                            <path id="pipe-output-main-ref" d="M 400,140 L 400,180" class="pipe-ref" />
-                            <path id="pipe-output-main-ref-2" d="M 400,140 L 400,180" class="pipe-ref-2" />
-                            <path id="pipe-output-main-ref-3" d="M 400,140 L 400,180" class="pipe-ref-3" />
+                            <path id="pipe-output-main" d="M 400,160 L 400,200" class="pipe" />
+                            <path id="pipe-output-main-ref" d="M 400,160 L 400,200" class="pipe-ref" />
+                            <path id="pipe-output-main-ref-2" d="M 400,160 L 400,200" class="pipe-ref-2" />
+                            <path id="pipe-output-main-ref-3" d="M 400,160 L 400,200" class="pipe-ref-3" />
                             
                             <!-- Branching Horizontal (Split for directional flow) -->
-                            <path id="pipe-header-left" d="M 400,180 L 150,180" class="pipe" />
-                            <path id="pipe-header-left-ref" d="M 400,180 L 150,180" class="pipe-ref" />
-                            <path id="pipe-header-left-ref-2" d="M 400,180 L 150,180" class="pipe-ref-2" />
-                            <path id="pipe-header-left-ref-3" d="M 400,180 L 150,180" class="pipe-ref-3" />
+                            <path id="pipe-header-left" d="M 400,200 L 150,200" class="pipe" />
+                            <path id="pipe-header-left-ref" d="M 400,200 L 150,200" class="pipe-ref" />
+                            <path id="pipe-header-left-ref-2" d="M 400,200 L 150,200" class="pipe-ref-2" />
+                            <path id="pipe-header-left-ref-3" d="M 400,200 L 150,200" class="pipe-ref-3" />
                             
-                            <path id="pipe-header-right" d="M 400,180 L 650,180" class="pipe" />
-                            <path id="pipe-header-right-ref" d="M 400,180 L 650,180" class="pipe-ref" />
-                            <path id="pipe-header-right-ref-2" d="M 400,180 L 650,180" class="pipe-ref-2" />
-                            <path id="pipe-header-right-ref-3" d="M 400,180 L 650,180" class="pipe-ref-3" />
+                            <path id="pipe-header-right" d="M 400,200 L 650,200" class="pipe" />
+                            <path id="pipe-header-right-ref" d="M 400,200 L 650,200" class="pipe-ref" />
+                            <path id="pipe-header-right-ref-2" d="M 400,200 L 650,200" class="pipe-ref-2" />
+                            <path id="pipe-header-right-ref-3" d="M 400,200 L 650,200" class="pipe-ref-3" />
                             
                             <!-- Junction Nodes -->
-                            <circle cx="150" cy="180" r="6" class="node" />
-                            <circle cx="400" cy="180" r="6" class="node" />
-                            <circle cx="650" cy="180" r="6" class="node" />
+                            <circle cx="150" cy="200" r="6" class="node" />
+                            <circle cx="400" cy="200" r="6" class="node" />
+                            <circle cx="650" cy="200" r="6" class="node" />
 
                             <!-- Area Branches -->
                             <!-- Kitchen -->
-                            <path id="pipe-kitchen-top" d="M 150,180 L 150,220" class="pipe" />
-                            <path id="pipe-kitchen-top-ref" d="M 150,180 L 150,220" class="pipe-ref" />
-                            <path id="pipe-kitchen-top-ref-2" d="M 150,180 L 150,220" class="pipe-ref-2" />
-                            <path id="pipe-kitchen-top-ref-3" d="M 150,180 L 150,220" class="pipe-ref-3" />
-                            <path id="pipe-kitchen-bottom" d="M 150,235 L 150,300" class="pipe" />
-                            <path id="pipe-kitchen-bottom-ref" d="M 150,235 L 150,300" class="pipe-ref" />
-                            <path id="pipe-kitchen-bottom-ref-2" d="M 150,235 L 150,300" class="pipe-ref-2" />
-                            <path id="pipe-kitchen-bottom-ref-3" d="M 150,235 L 150,300" class="pipe-ref-3" />
+                            <path id="pipe-kitchen-top" d="M 150,200 L 150,240" class="pipe" />
+                            <path id="pipe-kitchen-top-ref" d="M 150,200 L 150,240" class="pipe-ref" />
+                            <path id="pipe-kitchen-top-ref-2" d="M 150,200 L 150,240" class="pipe-ref-2" />
+                            <path id="pipe-kitchen-top-ref-3" d="M 150,200 L 150,240" class="pipe-ref-3" />
+                            <path id="pipe-kitchen-bottom" d="M 150,255 L 150,320" class="pipe" />
+                            <path id="pipe-kitchen-bottom-ref" d="M 150,255 L 150,320" class="pipe-ref" />
+                            <path id="pipe-kitchen-bottom-ref-2" d="M 150,255 L 150,320" class="pipe-ref-2" />
+                            <path id="pipe-kitchen-bottom-ref-3" d="M 150,255 L 150,320" class="pipe-ref-3" />
                             <g class="valve-node" onclick="openValveControl('kitchen')" 
                                onmousemove="showValveTooltip('kitchen', event)" 
                                onmouseleave="hideValveTooltip()"
                                id="node-kitchen">
-                                <rect x="135" y="220" width="30" height="15" rx="2" class="valve-rect" />
-                                <text x="110" y="210" class="label">Kitchen</text>
-                                <circle cx="150" cy="227.5" r="4" class="valve-dot" id="dot-kitchen" />
+                                <rect x="135" y="240" width="30" height="15" rx="2" class="valve-rect" />
+                                <text x="110" y="230" class="label">Kitchen</text>
+                                <circle cx="150" cy="247.5" r="4" class="valve-dot" id="dot-kitchen" />
                             </g>
 
                             <!-- Bathroom -->
-                            <path id="pipe-bathroom-top" d="M 400,180 L 400,220" class="pipe" />
-                            <path id="pipe-bathroom-top-ref" d="M 400,180 L 400,220" class="pipe-ref" />
-                            <path id="pipe-bathroom-top-ref-2" d="M 400,180 L 400,220" class="pipe-ref-2" />
-                            <path id="pipe-bathroom-top-ref-3" d="M 400,180 L 400,220" class="pipe-ref-3" />
-                            <path id="pipe-bathroom-bottom" d="M 400,235 L 400,300" class="pipe" />
-                            <path id="pipe-bathroom-bottom-ref" d="M 400,235 L 400,300" class="pipe-ref" />
-                            <path id="pipe-bathroom-bottom-ref-2" d="M 400,235 L 400,300" class="pipe-ref-2" />
-                            <path id="pipe-bathroom-bottom-ref-3" d="M 400,235 L 400,300" class="pipe-ref-3" />
+                            <path id="pipe-bathroom-top" d="M 400,200 L 400,240" class="pipe" />
+                            <path id="pipe-bathroom-top-ref" d="M 400,200 L 400,240" class="pipe-ref" />
+                            <path id="pipe-bathroom-top-ref-2" d="M 400,200 L 400,240" class="pipe-ref-2" />
+                            <path id="pipe-bathroom-top-ref-3" d="M 400,200 L 400,240" class="pipe-ref-3" />
+                            <path id="pipe-bathroom-bottom" d="M 400,255 L 400,320" class="pipe" />
+                            <path id="pipe-bathroom-bottom-ref" d="M 400,255 L 400,320" class="pipe-ref" />
+                            <path id="pipe-bathroom-bottom-ref-2" d="M 400,255 L 400,320" class="pipe-ref-2" />
+                            <path id="pipe-bathroom-bottom-ref-3" d="M 400,255 L 400,320" class="pipe-ref-3" />
                             <g class="valve-node" onclick="openValveControl('bathroom')" 
                                onmousemove="showValveTooltip('bathroom', event)" 
                                onmouseleave="hideValveTooltip()"
                                id="node-bathroom">
-                                <rect x="385" y="220" width="30" height="15" rx="2" class="valve-rect" />
-                                <text x="360" y="210" class="label">Bathroom</text>
-                                <circle cx="400" cy="227.5" r="4" class="valve-dot" id="dot-bathroom" />
+                                <rect x="385" y="240" width="30" height="15" rx="2" class="valve-rect" />
+                                <text x="360" y="230" class="label">Bathroom</text>
+                                <circle cx="400" cy="247.5" r="4" class="valve-dot" id="dot-bathroom" />
                             </g>
 
                             <!-- Garden -->
-                            <path id="pipe-garden-top" d="M 650,180 L 650,220" class="pipe" />
-                            <path id="pipe-garden-top-ref" d="M 650,180 L 650,220" class="pipe-ref" />
-                            <path id="pipe-garden-top-ref-2" d="M 650,180 L 650,220" class="pipe-ref-2" />
-                            <path id="pipe-garden-top-ref-3" d="M 650,180 L 650,220" class="pipe-ref-3" />
-                            <path id="pipe-garden-bottom" d="M 650,235 L 650,300" class="pipe" />
-                            <path id="pipe-garden-bottom-ref" d="M 650,235 L 650,300" class="pipe-ref" />
-                            <path id="pipe-garden-bottom-ref-2" d="M 650,235 L 650,300" class="pipe-ref-2" />
-                            <path id="pipe-garden-bottom-ref-3" d="M 650,235 L 650,300" class="pipe-ref-3" />
+                            <path id="pipe-garden-top" d="M 650,200 L 650,240" class="pipe" />
+                            <path id="pipe-garden-top-ref" d="M 650,200 L 650,240" class="pipe-ref" />
+                            <path id="pipe-garden-top-ref-2" d="M 650,200 L 650,240" class="pipe-ref-2" />
+                            <path id="pipe-garden-top-ref-3" d="M 650,200 L 650,240" class="pipe-ref-3" />
+                            <path id="pipe-garden-bottom" d="M 650,255 L 650,320" class="pipe" />
+                            <path id="pipe-garden-bottom-ref" d="M 650,255 L 650,320" class="pipe-ref" />
+                            <path id="pipe-garden-bottom-ref-2" d="M 650,255 L 650,320" class="pipe-ref-2" />
+                            <path id="pipe-garden-bottom-ref-3" d="M 650,255 L 650,320" class="pipe-ref-3" />
                             <g class="valve-node" onclick="openValveControl('garden')" 
                                onmousemove="showValveTooltip('garden', event)" 
                                onmouseleave="hideValveTooltip()"
                                id="node-garden">
-                                <rect x="635" y="220" width="30" height="15" rx="2" class="valve-rect" />
-                                <text x="610" y="210" class="label">Garden</text>
-                                <circle cx="650" cy="227.5" r="4" class="valve-dot" id="dot-garden" />
+                                <rect x="635" y="240" width="30" height="15" rx="2" class="valve-rect" />
+                                <text x="610" y="230" class="label">Garden</text>
+                                <circle cx="650" cy="247.5" r="4" class="valve-dot" id="dot-garden" />
                             </g>
                         </svg>
                     </div>
