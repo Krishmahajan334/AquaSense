@@ -21,7 +21,7 @@ void postData(float input_flow, float flow_k, float flow_b, float flow_g, const 
     
     // std::cout << "Sending: " << jsonPayload << std::endl;
                               
-    std::string command = "curl -s -X POST http://localhost:5050/api/data "
+    std::string command = "curl -s -X POST https://aquasense-9g0t.onrender.com/api/data "
                           "-H \"Content-Type: application/json\" "
                           "-d '" + jsonPayload + "' > /dev/null";
                           
