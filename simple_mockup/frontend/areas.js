@@ -35,16 +35,29 @@ function updateUI(data) {
     togglePipe('pipe-header-left', isHeaderActive);
     togglePipe('pipe-header-right', isHeaderActive);
 
-    // Update Tank Viz in SVG
+    // Update Tank Viz in SVG (Native SVG)
     if (data.tank_level !== undefined) {
         const tankVizText = document.getElementById('tank-viz-text');
-        const tankWaterFill = document.getElementById('tank-water-fill');
+        const fillEl = document.getElementById('tank-water-fill');
+        const stop1 = document.querySelector('#tank-gradient stop:first-child');
+        const stop2 = document.querySelector('#tank-gradient stop:last-child');
+
         if (tankVizText) tankVizText.textContent = data.tank_level.toFixed(0) + '%';
-        if (tankWaterFill) {
-            tankWaterFill.style.height = data.tank_level + '%';
-            if (data.tank_level < 20) tankWaterFill.style.background = 'linear-gradient(180deg, #ef4444, #b91c1c)';
-            else if (data.tank_level < 50) tankWaterFill.style.background = 'linear-gradient(180deg, #f59e0b, #d97706)';
-            else tankWaterFill.style.background = 'linear-gradient(180deg, #38bdf8, #0284c7)';
+        if (fillEl) {
+            const fillHeight = (data.tank_level / 100) * 90;
+            fillEl.setAttribute('height', fillHeight);
+            fillEl.setAttribute('y', 150 - fillHeight);
+            
+            if (data.tank_level < 20) {
+                if(stop1) stop1.setAttribute('stop-color', '#ef4444');
+                if(stop2) stop2.setAttribute('stop-color', '#b91c1c');
+            } else if (data.tank_level < 50) {
+                if(stop1) stop1.setAttribute('stop-color', '#f59e0b');
+                if(stop2) stop2.setAttribute('stop-color', '#d97706');
+            } else {
+                if(stop1) stop1.setAttribute('stop-color', '#38bdf8');
+                if(stop2) stop2.setAttribute('stop-color', '#0284c7');
+            }
         }
     }
 

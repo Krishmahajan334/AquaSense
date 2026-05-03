@@ -172,18 +172,29 @@ function updateDashboard(data) {
     if (data.tank_level !== undefined) {
         document.getElementById('tank-level-val').textContent = data.tank_level.toFixed(1);
         document.getElementById('tank-viz-text').textContent = data.tank_level.toFixed(0) + '%';
-        document.getElementById('tank-water-fill').style.height = data.tank_level + '%';
+        
+        // Native SVG Update
+        const fillEl = document.getElementById('tank-water-fill');
+        const fillHeight = (data.tank_level / 100) * 90;
+        fillEl.setAttribute('height', fillHeight);
+        fillEl.setAttribute('y', 150 - fillHeight);
         
         const tankIcon = document.getElementById('tank-icon-container');
+        const stop1 = document.querySelector('#tank-gradient stop:first-child');
+        const stop2 = document.querySelector('#tank-gradient stop:last-child');
+        
         if (data.tank_level < 20) {
             if(tankIcon) tankIcon.className = 'card-icon danger';
-            document.getElementById('tank-water-fill').style.background = 'linear-gradient(180deg, #ef4444, #b91c1c)';
+            if(stop1) stop1.setAttribute('stop-color', '#ef4444');
+            if(stop2) stop2.setAttribute('stop-color', '#b91c1c');
         } else if (data.tank_level < 50) {
             if(tankIcon) tankIcon.className = 'card-icon warning';
-            document.getElementById('tank-water-fill').style.background = 'linear-gradient(180deg, #f59e0b, #d97706)';
+            if(stop1) stop1.setAttribute('stop-color', '#f59e0b');
+            if(stop2) stop2.setAttribute('stop-color', '#d97706');
         } else {
             if(tankIcon) tankIcon.className = 'card-icon primary';
-            document.getElementById('tank-water-fill').style.background = 'linear-gradient(180deg, #38bdf8, #0284c7)';
+            if(stop1) stop1.setAttribute('stop-color', '#38bdf8');
+            if(stop2) stop2.setAttribute('stop-color', '#0284c7');
         }
     }
     
