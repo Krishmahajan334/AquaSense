@@ -575,6 +575,19 @@ def reset_system():
     if os.path.exists(HISTORY_FILE):
         os.remove(HISTORY_FILE)
     
+    # Reset Firestore History if available
+    if db:
+        try:
+            # Batch delete for efficiency
+            batch = db.batch()
+            docs = db.collection('history').limit(500).stream()
+            for doc in docs:
+                batch.delete(doc.reference)
+            batch.commit()
+            print("✅ Firestore history collection cleared.")
+        except Exception as e:
+            print(f"Firestore reset error: {e}")
+
     # Reset in-memory data
     system_data["total_water_usage"] = 0.0
     system_data["total_water_saved"] = 0.0
