@@ -501,3 +501,27 @@ function hideValveTooltip() {
 
 fetchSystemData();
 setInterval(fetchSystemData, 1000); // Polling 1s
+
+// Mobile Sidebar Logic
+const menuToggle = document.getElementById('menu-toggle');
+const sidebar = document.getElementById('sidebar');
+const sidebarOverlay = document.getElementById('sidebar-overlay');
+
+if (menuToggle && sidebar && sidebarOverlay) {
+    const toggleSidebar = () => {
+        sidebar.classList.toggle('active');
+        sidebarOverlay.classList.toggle('active');
+    };
+
+    menuToggle.addEventListener('click', toggleSidebar);
+    sidebarOverlay.addEventListener('click', toggleSidebar);
+    
+    // Close sidebar when a link is clicked (optional but good for UX)
+    const navLinks = sidebar.querySelectorAll('.nav-links a');
+    navLinks.forEach(link => {
+        link.addEventListener('click', () => {
+            sidebar.classList.remove('active');
+            sidebarOverlay.classList.remove('active');
+        });
+    });
+}

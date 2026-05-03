@@ -269,3 +269,20 @@ document.addEventListener('DOMContentLoaded', () => {
 // Initial fetch and start interval
 fetchAreaData();
 setInterval(fetchAreaData, 1000);
+
+// Mobile Sidebar Logic
+document.addEventListener('DOMContentLoaded', () => {
+    const menuToggle = document.getElementById('menu-toggle');
+    const sidebar = document.getElementById('sidebar');
+    const sidebarOverlay = document.getElementById('sidebar-overlay');
+
+    if (menuToggle && sidebar && sidebarOverlay) {
+        const toggleSidebar = () => {
+            sidebar.classList.toggle('active');
+            sidebarOverlay.classList.toggle('active');
+        };
+
+        menuToggle.addEventListener('click', toggleSidebar);
+        sidebarOverlay.addEventListener('click', toggleSidebar);
+    }
+});
