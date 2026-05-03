@@ -893,6 +893,14 @@
                 }
             }
         });
+        // Keep-Alive Ping for Render Free Tier
+        function keepAlive() {
+            const url = 'https://aquasense-9g0t.onrender.com/api/data';
+            fetch(url).then(() => console.log('Keep-alive ping successful')).catch(() => console.log('Keep-alive ping failed'));
+        }
+        // Ping every 10 minutes
+        setInterval(keepAlive, 10 * 60 * 1000);
+        keepAlive(); // Initial ping
     </script>
 </body>
 </html>
