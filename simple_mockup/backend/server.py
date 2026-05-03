@@ -289,6 +289,20 @@ def serve_diagrams(path):
 def serve_outputs(path):
     return send_from_directory(outputs_dir, path)
 
+@app.route('/debug-paths')
+def debug_paths():
+    try:
+        p_exists = os.path.exists(presentation_dir)
+        p_list = os.listdir(presentation_dir) if p_exists else []
+        return jsonify({
+            "cwd": os.getcwd(),
+            "presentation_dir": presentation_dir,
+            "exists": p_exists,
+            "contents": p_list
+        })
+    except Exception as e:
+        return jsonify({"error": str(e)})
+
 @app.route('/<path:path>')
 def serve_static(path):
     return send_from_directory(frontend_dir, path)
