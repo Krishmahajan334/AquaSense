@@ -263,9 +263,31 @@ def generate_suggestions():
         suggestions.append("System is optimized. Flow rates are within normal limits.")
     system_data['suggestions'] = suggestions
 
+# Define paths for additional static resources
+presentation_dir = os.path.join(os.path.dirname(os.path.abspath(__file__)), '../../demo_presentation')
+diagrams_dir = os.path.join(os.path.dirname(os.path.abspath(__file__)), '../../Diagrams')
+outputs_dir = os.path.join(os.path.dirname(os.path.abspath(__file__)), '../../Outputs')
+
 @app.route('/')
 def serve_index():
     return send_from_directory(frontend_dir, 'index.html')
+
+@app.route('/presentation/')
+@app.route('/presentation/index.html')
+def serve_presentation():
+    return send_from_directory(presentation_dir, 'index.html')
+
+@app.route('/presentation/<path:path>')
+def serve_presentation_assets(path):
+    return send_from_directory(presentation_dir, path)
+
+@app.route('/Diagrams/<path:path>')
+def serve_diagrams(path):
+    return send_from_directory(diagrams_dir, path)
+
+@app.route('/Outputs/<path:path>')
+def serve_outputs(path):
+    return send_from_directory(outputs_dir, path)
 
 @app.route('/<path:path>')
 def serve_static(path):
