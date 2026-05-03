@@ -590,6 +590,22 @@ def reset_system():
     add_alert("System state and history reset by admin.")
     return jsonify({"status": "success"})
 
+def keep_alive_ping_loop():
+    """Self-pinging loop to keep Render free tier alive."""
+    url = "https://aquasense-9g0t.onrender.com/"
+    print("🔄 Self-pinging keep-alive thread started.")
+    while True:
+        try:
+            # Simple GET request to the home page
+            with urllib.request.urlopen(url, timeout=15) as response:
+                if response.status == 200:
+                    print(f"✅ Keep-alive: Server pinged successfully at {datetime.now().strftime('%H:%M:%S')}")
+        except Exception as e:
+            print(f"⚠️ Keep-alive ping failed: {e}")
+        
+        # Sleep for 10 minutes (Render timeout is 15 mins)
+        time.sleep(600)
+
 @app.route('/api/control', methods=['POST'])
 def toggle_control():
     global system_data
@@ -694,6 +710,11 @@ if __name__ == '__main__':
             t_sim = threading.Thread(target=cloud_simulator_loop, daemon=True)
             t_sim.start()
             print("Starting Background Cloud Simulator...")
+            
+            # Start self-pinging keep-alive thread
+            t_keepalive = threading.Thread(target=keep_alive_ping_loop, daemon=True)
+            t_keepalive.start()
+            print("Starting Internal Keep-Alive Monitor...")
         
     ip = get_local_ip()
     print("\n" + "="*50)
