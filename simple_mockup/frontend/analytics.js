@@ -394,4 +394,10 @@ async function generateDailyReport() {
     }
 }
 
-window.onload = loadReport;
+window.onload = () => {
+    loadReport();
+    const params = new URLSearchParams(window.location.search);
+    if (params.get('auto') === 'report') {
+        setTimeout(generateDailyReport, 800); // Small delay to ensure smooth loading
+    }
+};
