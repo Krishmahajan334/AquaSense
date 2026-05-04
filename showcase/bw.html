@@ -22,11 +22,10 @@
     </script>
 
     <style>
-        /* Black & White Minimalist Theme Overrides */
+        /* Black & White Theme Overrides - Restored Layout */
         :root {
-            --primary-cyan: #ffffff; /* Becomes White */
-            --primary-blue: #a1a1aa; /* Becomes Gray */
-            --primary-accent: #000000; /* Becomes Black */
+            --primary-cyan: #000000;
+            --primary-blue: #475569;
         }
         
         body {
@@ -35,12 +34,12 @@
         }
 
         .reveal-viewport {
-            background: #ffffff !important;
-            filter: grayscale(100%);
+            background: #f1f5f9 !important;
         }
 
         .reveal {
-            background: #ffffff !important;
+            background: rgba(255, 255, 255, 0.9) !important;
+            backdrop-filter: blur(5px);
             font-family: 'Inter', -apple-system, sans-serif;
             color: #000000;
         }
@@ -57,9 +56,6 @@
             margin-bottom: 20px;
             font-size: 2em;
             letter-spacing: -0.02em;
-            border-bottom: 2px solid #000000;
-            display: inline-block;
-            padding-bottom: 5px;
         }
 
         .gradient-text {
@@ -69,83 +65,84 @@
             font-weight: 800;
         }
 
-        /* BW Minimalism Cards */
+        /* BW Glassmorphism Cards */
         .glass-card {
-            background: #ffffff;
-            border: 2px solid #000000;
-            border-radius: 0px; /* Sharp corners for BW aesthetic */
+            background: rgba(0, 0, 0, 0.03);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(0, 0, 0, 0.1);
+            border-radius: 15px;
             padding: 20px;
-            box-shadow: 10px 10px 0px #000000; /* Brutalist shadow */
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.05);
             margin: 10px auto;
+            transition: transform 0.3s ease;
         }
         
         .glass-card:hover {
-            transform: translate(-2px, -2px);
-            box-shadow: 12px 12px 0px #000000;
+            border-color: rgba(0, 0, 0, 0.3);
         }
 
         .title-card {
-            background: #ffffff;
+            background: rgba(255, 255, 255, 0.8);
             padding: 50px !important;
-            border: 4px solid #000000;
+            border-radius: 20px;
+            border: 2px solid #000000;
+            display: inline-block;
         }
 
+        .grid-2 {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            text-align: left;
+        }
+        
+        .grid-3 {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 15px;
+        }
+
+        .reveal ul {
+            display: block;
+            margin-left: 1.5em;
+        }
+
+        .reveal li {
+            margin-bottom: 10px;
+            font-size: 0.8em;
+            color: #1e293b;
+            line-height: 1.4;
+        }
+        
         .icon-box {
             font-size: 2em;
             color: #000000;
             margin-bottom: 10px;
-            text-shadow: none;
         }
 
-        .reveal li {
-            color: #000000;
-            list-style-type: square;
-        }
-
-        .highlight {
-            color: #000000;
-            text-decoration: underline;
-        }
-
-        /* Testing Tables BW */
-        .testing-table {
-            border: 2px solid #000000;
-            color: #000000;
-        }
-        .testing-table th {
-            background: #000000;
-            color: #ffffff;
-            border-bottom: 2px solid #000000;
-        }
-        .testing-table td {
-            border-bottom: 1px solid #000000;
-        }
-        .pass-badge {
-            background: #000000;
-            color: #ffffff;
-            border: 1px solid #000000;
-        }
-
-        /* Reveal UI Elements BW */
-        .reveal .controls { color: #000000; }
-        .reveal .progress { background: #e5e7eb; height: 8px; }
-        .reveal .progress span { background: #000000; }
-        .reveal .slide-number { color: #000000; }
-
-        /* Translucent Dark Box for all normal slides (Now White Box) */
-        .reveal .slides > section:not([data-background-image]) {
-            background: #ffffff !important;
-            border-radius: 0px;
-            padding: 40px !important;
-            border: 3px solid #000000;
-            box-shadow: 15px 15px 0px #000000;
-        }
-
-        /* Diagrams Zoom Wrapper BW */
+        /* Diagrams Zoom Wrapper (Image colors restored) */
         .diagram-zoom-wrapper {
+            width: 100%;
+            height: 720px;
+            border-radius: 12px;
             border: 2px solid #000000 !important;
-            box-shadow: 8px 8px 0px #000000 !important;
-            filter: grayscale(100%) contrast(1.2);
+            box-shadow: 0 0 30px rgba(0, 0, 0, 0.1) !important;
+            background: white; 
+            overflow: hidden;
+            position: relative;
+        }
+
+        .diagram-img {
+            max-width: 100%;
+            max-height: 100%;
+            object-fit: contain;
+            display: block;
+            margin: auto;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
         }
     </style>
 </head>
