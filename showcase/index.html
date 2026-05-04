@@ -487,67 +487,6 @@
                 </div>
             </section>
 
-            <!-- Integration Testing Section -->
-            <section>
-                <h2>Integration Testing</h2>
-                <div class="glass-card" style="padding: 20px;">
-                    <table class="testing-table">
-                        <thead>
-                            <tr>
-                                <th>Test ID</th>
-                                <th>Interface</th>
-                                <th>Test Scenario</th>
-                                <th>Input Data</th>
-                                <th>Expected Outcome</th>
-                                <th>Status</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td>IT-01</td>
-                                <td>C++ -> Flask</td>
-                                <td>Sensor Data Ingestion</td>
-                                <td>JSON: {"main_flow": 10.0}</td>
-                                <td>HTTP 200 OK; Backend data updated</td>
-                                <td><span class="pass-badge">Pass</span></td>
-                            </tr>
-                            <tr>
-                                <td>IT-02</td>
-                                <td>Flask -> CSV</td>
-                                <td>Persistence Validation</td>
-                                <td>Data Update Event</td>
-                                <td>File history.csv size increases</td>
-                                <td><span class="pass-badge">Pass</span></td>
-                            </tr>
-                            <tr>
-                                <td>IT-03</td>
-                                <td>Flask -> JS</td>
-                                <td>API Data Retrieval</td>
-                                <td>GET /api/data</td>
-                                <td>Valid JSON received by frontend</td>
-                                <td><span class="pass-badge">Pass</span></td>
-                            </tr>
-                            <tr>
-                                <td>IT-04</td>
-                                <td>Flask -> Telegram</td>
-                                <td>Alert Notification</td>
-                                <td>Critical Leak Trigger</td>
-                                <td>Push notification received on mobile</td>
-                                <td><span class="pass-badge">Pass</span></td>
-                            </tr>
-                            <tr>
-                                <td>IT-05</td>
-                                <td>Telegram -> Flask</td>
-                                <td>Remote Command</td>
-                                <td>/area control kitchen valve off</td>
-                                <td>Kitchen valve status set to False</td>
-                                <td><span class="pass-badge">Pass</span></td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-            </section>
-
             <!-- Unit Testing Section -->
             <section>
                 <h2>Unit Testing</h2>
@@ -602,6 +541,67 @@
                                 <td>Alert Trigger Logic</td>
                                 <td>Flow > 12.0 L/m</td>
                                 <td>"High Flow" alert string generated</td>
+                                <td><span class="pass-badge">Pass</span></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
+            <!-- Integration Testing Section -->
+            <section>
+                <h2>Integration Testing</h2>
+                <div class="glass-card" style="padding: 20px;">
+                    <table class="testing-table">
+                        <thead>
+                            <tr>
+                                <th>Test ID</th>
+                                <th>Interface</th>
+                                <th>Test Scenario</th>
+                                <th>Input Data</th>
+                                <th>Expected Outcome</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>IT-01</td>
+                                <td>C++ -> Flask</td>
+                                <td>Sensor Data Ingestion</td>
+                                <td>JSON: {"main_flow": 10.0}</td>
+                                <td>HTTP 200 OK; Backend data updated</td>
+                                <td><span class="pass-badge">Pass</span></td>
+                            </tr>
+                            <tr>
+                                <td>IT-02</td>
+                                <td>Flask -> CSV</td>
+                                <td>Persistence Validation</td>
+                                <td>Data Update Event</td>
+                                <td>File history.csv size increases</td>
+                                <td><span class="pass-badge">Pass</span></td>
+                            </tr>
+                            <tr>
+                                <td>IT-03</td>
+                                <td>Flask -> JS</td>
+                                <td>API Data Retrieval</td>
+                                <td>GET /api/data</td>
+                                <td>Valid JSON received by frontend</td>
+                                <td><span class="pass-badge">Pass</span></td>
+                            </tr>
+                            <tr>
+                                <td>IT-04</td>
+                                <td>Flask -> Telegram</td>
+                                <td>Alert Notification</td>
+                                <td>Critical Leak Trigger</td>
+                                <td>Push notification received on mobile</td>
+                                <td><span class="pass-badge">Pass</span></td>
+                            </tr>
+                            <tr>
+                                <td>IT-05</td>
+                                <td>Telegram -> Flask</td>
+                                <td>Remote Command</td>
+                                <td>/area control kitchen valve off</td>
+                                <td>Kitchen valve status set to False</td>
                                 <td><span class="pass-badge">Pass</span></td>
                             </tr>
                         </tbody>
