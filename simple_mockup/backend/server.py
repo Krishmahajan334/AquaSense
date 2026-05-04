@@ -640,32 +640,37 @@ def cloud_simulator_loop():
     print("🚀 Cloud Hardware Simulator Started.")
     while True:
         try:
-            # Replicate C++ logic
-            base_in = 20.0
-            base_k = 3.0
-            base_b = 6.0
-            base_g = 8.0
+            # Replicate C++ logic with enhanced variance
+            base_in = 22.0
+            base_k = 4.0
+            base_b = 7.0
+            base_g = 10.0
             
-            # Simple fluctuations
-            cur_in = base_in + random.uniform(-2.0, 2.0)
-            cur_k = base_k + random.uniform(-1.0, 1.0)
-            cur_b = base_b + random.uniform(-2.0, 2.0)
-            cur_g = base_g + random.uniform(-1.5, 1.5)
+            # Dynamic fluctuations (High variance for realistic charts)
+            cur_in = base_in + random.uniform(-5.0, 5.0)
+            cur_k = base_k + random.uniform(-2.5, 3.5)
+            cur_b = base_b + random.uniform(-3.5, 4.5)
+            cur_g = base_g + random.uniform(-4.0, 6.0)
             
-            # Simulate Municipal Water Cut (every ~10 mins for 30s)
+            # Simulate Municipal Water Cut (every ~15 mins for 1 min)
             now_sec = int(time.time())
-            if (now_sec // 600) % 2 == 0 and (now_sec % 600) < 30:
+            if (now_sec // 900) % 2 == 0 and (now_sec % 900) < 60:
                 cur_in = 0.0
             
-            # Randomly simulate an anomaly (Leak/High Flow)
-            # 3% chance for Bathroom, 2% for Garden
-            rand_anomaly = random.randint(0, 100)
-            if rand_anomaly < 3:
-                cur_b += 10.0
-                add_alert("⚠️ High flow detected in Bathroom! Possible leak.")
-            elif 3 <= rand_anomaly < 5:
-                cur_g += 15.0
-                add_alert("⚠️ High flow detected in Garden! Pipe burst?")
+            # Randomly simulate anomalies (Leak/High Flow/Conservation)
+            rand_val = random.randint(0, 100)
+            if rand_val < 4: # 4% chance Bathroom Leak
+                cur_b += 12.0
+                add_alert("⚠️ Anomalous high flow in Bathroom! Investigating for leaks.")
+            elif 4 <= rand_val < 7: # 3% chance Garden Burst
+                cur_g += 18.0
+                add_alert("⚠️ Potential pipe burst in Garden/Plantation area!")
+            elif 7 <= rand_val < 10: # 3% chance Kitchen Spike
+                cur_k += 10.0
+                add_alert("⚠️ Kitchen usage spike detected.")
+            elif 10 <= rand_val < 15: # 5% chance Conservation Success
+                cur_in *= 0.7 # Simulate reduced input need due to storage
+                add_alert("✅ System optimized: Conservation targets met.")
 
             # Update global system_data
             global system_data
