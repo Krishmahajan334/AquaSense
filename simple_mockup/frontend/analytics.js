@@ -395,8 +395,16 @@ async function generateDailyReport() {
 }
 
 window.onload = () => {
-    loadReport();
     const params = new URLSearchParams(window.location.search);
+    const granParam = params.get('granularity');
+    if (granParam) {
+        const granSelect = document.getElementById('granularity');
+        if (granSelect) {
+            granSelect.value = granParam;
+        }
+    }
+    
+    loadReport();
     if (params.get('auto') === 'report') {
         setTimeout(generateDailyReport, 800); // Small delay to ensure smooth loading
     }
