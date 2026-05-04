@@ -396,12 +396,26 @@ async function generateDailyReport() {
 
 window.onload = () => {
     const params = new URLSearchParams(window.location.search);
+    
+    // Set Granularity
     const granParam = params.get('granularity');
     if (granParam) {
         const granSelect = document.getElementById('granularity');
-        if (granSelect) {
-            granSelect.value = granParam;
-        }
+        if (granSelect) granSelect.value = granParam;
+    }
+
+    // Set Report Type
+    const typeParam = params.get('type');
+    if (typeParam) {
+        const typeSelect = document.getElementById('report-type');
+        if (typeSelect) typeSelect.value = typeParam;
+    }
+
+    // Set Compare Mode
+    const compareParam = params.get('compare');
+    if (compareParam === 'true') {
+        const compareToggle = document.getElementById('compare-mode');
+        if (compareToggle) compareToggle.checked = true;
     }
     
     loadReport();
