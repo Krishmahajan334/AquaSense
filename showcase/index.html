@@ -266,7 +266,7 @@
                     
                     <div style="margin-top: 50px; font-size: 0.65em; color: #cbd5e1; text-align: center; border-top: 1px solid rgba(255,255,255,0.1); padding-top: 25px;">
                         <p style="margin: 0;">Under Guidance of</p>
-                        <p style="margin: 5px 0;"><strong style="color: var(--primary-cyan); font-size: 1.1em; letter-spacing: 1px;">V.V. Kheradkar</strong></p>
+                        <p style="margin: 5px 0;"><strong style="color: var(--primary-cyan); font-size: 1.1em; letter-spacing: 1px;">Dr. V.V. Kheradkar</strong></p>
                         <p style="margin: 5px 0;">&</p>
                         <p style="margin: 5px 0;"><strong style="color: var(--primary-cyan); font-size: 1.1em; letter-spacing: 1px;">J.D. Pakhare</strong></p>
                         <p style="margin-top: 15px; font-size: 0.9em; opacity: 0.8;">Department of Computer Science & Engineering</p>
@@ -302,18 +302,13 @@
             <!-- 3. Problem Statement -->
             <section>
                 <h2>Problem Statement</h2>
-                <div class="glass-card" style="text-align: left; padding: 40px; max-width: 1000px; margin: 0 auto;">
-                    <p style="font-size: 0.9em; line-height: 1.8; color: #cbd5e1;">
-                        The core challenge lies in the <strong class="highlight">absence of an integrated, real-time, and intelligent water monitoring and management system</strong>. 
-                        In shared environments like hostels and apartments, water consumption remains largely unregulated and unoptimized due to a lack of visibility.
+                <div class="glass-card" style="text-align: justify; padding: 40px; max-width: 1000px; margin: 0 auto;">
+                    <p style="font-size: 0.9em; line-height: 1.8; color: #cbd5e1; margin-bottom: 20px;">
+                        Water scarcity and inefficient usage have become serious challenges in modern society, especially in shared environments such as hostels and apartments. In such settings, water is consumed across multiple areas including bathrooms and kitchens, but the absence of proper monitoring systems makes it difficult to track how much water is being used in each area.
                     </p>
-                    <div style="margin-top: 25px; border-left: 4px solid var(--primary-cyan); padding-left: 25px;">
-                        <ul style="list-style: none; margin: 0; padding: 0;">
-                            <li style="margin-bottom: 15px;"><i class="fa-solid fa-circle-exclamation" style="color: var(--primary-cyan); margin-right: 10px;"></i> <span style="color: #f8fafc; font-weight: 500;">Lack of Visibility:</span> Users are unaware of consumption patterns, leading to excessive usage.</li>
-                            <li style="margin-bottom: 15px;"><i class="fa-solid fa-circle-exclamation" style="color: var(--primary-cyan); margin-right: 10px;"></i> <span style="color: #f8fafc; font-weight: 500;">Manual Inefficiency:</span> Storage tanks managed manually result in frequent overflows or sudden depletion.</li>
-                            <li style="margin-bottom: 0;"><i class="fa-solid fa-circle-exclamation" style="color: var(--primary-cyan); margin-right: 10px;"></i> <span style="color: #f8fafc; font-weight: 500;">Aggregated Data:</span> Inability to identify high-usage zones or detect irregular patterns at the area level.</li>
-                        </ul>
-                    </div>
+                    <p style="font-size: 0.9em; line-height: 1.8; color: #cbd5e1; border-left: 4px solid var(--primary-cyan); padding-left: 25px;">
+                        Therefore, the problem lies in the <strong class="highlight">absence of an integrated, real-time, and intelligent water monitoring and management system</strong> that can provide area-wise consumption insights, prevent wastage, ensure fair distribution, and support efficient utilization of water resources.
+                    </p>
                 </div>
             </section>
 
@@ -349,7 +344,7 @@
                 <h2>Aims & Objectives</h2>
                 <div class="glass-card" style="text-align: left; padding: 30px;">
                     <ul>
-                        <li style="font-size: 1.1em; color: #f8fafc;"><span class="highlight">Core Aim:</span> Engineer a comprehensive, IoT-based smart water monitoring ecosystem.</li>
+                        <li style="font-size: 1.1em; color: #f8fafc;"><span class="highlight">Aim:</span> Engineer a comprehensive, IoT-based smart water monitoring ecosystem.</li>
                         <hr style="border-color: rgba(255,255,255,0.1); margin: 15px 0;">
                         <li>Deploy multi-node flow sensors for independent <span class="highlight">area-wise consumption</span> profiling.</li>
                         <li>Implement a robust backend to parse <span class="highlight">real-time telemetry</span> for tank levels and flow rates.</li>
@@ -384,19 +379,7 @@
                 </div>
             </section>
 
-            <!-- 6. Working Flow -->
-            <section>
-                <h2>Data & Actuation Pipeline</h2>
-                <div class="glass-card" style="text-align: left; padding: 30px;">
-                    <div style="display: flex; flex-direction: column; gap: 15px;">
-                        <div><strong class="highlight">1. Sense:</strong> Physical metrics captured via YF-S201 flow sensors and Ultrasonic depth sensors.</div>
-                        <div><strong class="highlight">2. Process:</strong> Edge processing handled by ESP32/ESP8266 to sanitize raw signals.</div>
-                        <div><strong class="highlight">3. Transmit:</strong> JSON payloads dispatched to the Flask backend via high-speed Wi-Fi.</div>
-                        <div><strong class="highlight">4. Analyze:</strong> Rules engine evaluates consumption vectors and isolates anomalies.</div>
-                        <div><strong class="highlight">5. Actuate:</strong> WebSocket dashboard updates, servos auto-correct flow, and Telegram triggers webhook alerts.</div>
-                    </div>
-                </div>
-            </section>
+
 
             <!-- 7. Core Modules -->
             <section>
@@ -454,6 +437,20 @@
                 </div>
                 <div style="text-align: center;">
                     <p style="font-size: 0.8em; color: #ff4444; font-weight: bold; border: 2px solid #ff4444; padding: 5px 15px; display: inline-block; margin-top: 20px; opacity: 1;">Fig: Use case diagram</p>
+                </div>
+            </section>
+
+            <!-- Data & Actuation Pipeline (Moved here) -->
+            <section>
+                <h2>Data & Actuation Pipeline</h2>
+                <div class="glass-card" style="text-align: left; padding: 30px;">
+                    <div style="display: flex; flex-direction: column; gap: 15px;">
+                        <div><strong class="highlight">1. Sense:</strong> Physical metrics captured via YF-S201 flow sensors and Ultrasonic depth sensors.</div>
+                        <div><strong class="highlight">2. Process:</strong> Edge processing handled by ESP32/ESP8266 to sanitize raw signals.</div>
+                        <div><strong class="highlight">3. Transmit:</strong> JSON payloads dispatched to the Flask backend via high-speed Wi-Fi.</div>
+                        <div><strong class="highlight">4. Analyze:</strong> Rules engine evaluates consumption vectors and isolates anomalies.</div>
+                        <div><strong class="highlight">5. Actuate:</strong> WebSocket dashboard updates, servos auto-correct flow, and Telegram triggers webhook alerts.</div>
+                    </div>
                 </div>
             </section>
 
@@ -872,6 +869,31 @@
                     <p style="font-size: 0.9em; color: #cbd5e1; margin-bottom: 0; line-height: 1.6;">
                         AquaSense provides a highly scalable and automated ecosystem for water management. By integrating IoT sensor nodes with a real-time analytics dashboard, the system successfully enables proactive conservation, rapid anomaly detection, and robust remote actuation.
                     </p>
+                </div>
+            </section>
+
+            <!-- Literature Review -->
+            <section>
+                <h2>Literature Review</h2>
+                <div class="glass-card" style="text-align: left; padding: 30px; max-width: 1000px; margin: 0 auto;">
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+                        <div style="font-size: 0.65em;">
+                            <h4 style="color: var(--primary-cyan); margin-bottom: 10px;">1. Cyber-Physical Systems</h4>
+                            <p style="color: #94a3b8; line-height: 1.4;">Focus on the "Perception Layer" using Hall-Effect sensors. AquaSense leverages ESP32's dual-core power for interrupt-driven telemetry.</p>
+                        </div>
+                        <div style="font-size: 0.65em;">
+                            <h4 style="color: var(--primary-cyan); margin-bottom: 10px;">2. Communication Protocols</h4>
+                            <p style="color: #94a3b8; line-height: 1.4;">RESTful API architectures are superior for Digital Twin simulations where data integrity and synchronous handshakes are critical.</p>
+                        </div>
+                        <div style="font-size: 0.65em;">
+                            <h4 style="color: var(--primary-cyan); margin-bottom: 10px;">3. Adaptive Aeration Logic</h4>
+                            <p style="color: #94a3b8; line-height: 1.4;">Flow throttling can result in a cumulative 35% reduction in consumption. AquaSense programmatically simulates valve resistance.</p>
+                        </div>
+                        <div style="font-size: 0.65em;">
+                            <h4 style="color: var(--primary-cyan); margin-bottom: 10px;">4. Data Visualization</h4>
+                            <p style="color: #94a3b8; line-height: 1.4;">Glassmorphism and real-time Time-Series charts provide higher psychological impact, encouraging responsible consumption habits.</p>
+                        </div>
+                    </div>
                 </div>
             </section>
 
