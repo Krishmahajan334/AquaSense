@@ -872,28 +872,72 @@
                 </div>
             </section>
 
-            <!-- Literature Review -->
+            <!-- Literature Review 1: Academic Pillars -->
             <section>
                 <h2>Literature Review</h2>
-                <div class="glass-card" style="text-align: left; padding: 30px; max-width: 1000px; margin: 0 auto;">
-                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
-                        <div style="font-size: 0.65em;">
-                            <h4 style="color: var(--primary-cyan); margin-bottom: 10px;">1. Cyber-Physical Systems</h4>
-                            <p style="color: #94a3b8; line-height: 1.4;">Focus on the "Perception Layer" using Hall-Effect sensors. AquaSense leverages ESP32's dual-core power for interrupt-driven telemetry.</p>
+                <div class="glass-card" style="text-align: left; padding: 30px; max-width: 1100px; margin: 0 auto;">
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 25px;">
+                        <div style="font-size: 0.65em; background: rgba(255,255,255,0.02); padding: 15px; border-radius: 10px;">
+                            <h4 style="color: var(--primary-cyan); margin-bottom: 8px; font-size: 1.2em;">1. Cyber-Physical Systems</h4>
+                            <p style="color: #cbd5e1; line-height: 1.5;">Research by Al-Fuqaha (2015) emphasizes the "Perception Layer." AquaSense leverages dual-core edge processing to handle interrupt-driven flow pulses without logic-blocking.</p>
                         </div>
-                        <div style="font-size: 0.65em;">
-                            <h4 style="color: var(--primary-cyan); margin-bottom: 10px;">2. Communication Protocols</h4>
-                            <p style="color: #94a3b8; line-height: 1.4;">RESTful API architectures are superior for Digital Twin simulations where data integrity and synchronous handshakes are critical.</p>
+                        <div style="font-size: 0.65em; background: rgba(255,255,255,0.02); padding: 15px; border-radius: 10px;">
+                            <h4 style="color: var(--primary-cyan); margin-bottom: 8px; font-size: 1.2em;">2. Communication Protocols</h4>
+                            <p style="color: #cbd5e1; line-height: 1.5;">Studies show RESTful architectures are superior to MQTT for "Digital Twin" simulations where data integrity and synchronous handshakes are mandatory.</p>
                         </div>
-                        <div style="font-size: 0.65em;">
-                            <h4 style="color: var(--primary-cyan); margin-bottom: 10px;">3. Adaptive Aeration Logic</h4>
-                            <p style="color: #94a3b8; line-height: 1.4;">Flow throttling can result in a cumulative 35% reduction in consumption. AquaSense programmatically simulates valve resistance.</p>
+                        <div style="font-size: 0.65em; background: rgba(255,255,255,0.02); padding: 15px; border-radius: 10px;">
+                            <h4 style="color: var(--primary-cyan); margin-bottom: 8px; font-size: 1.2em;">3. Adaptive Aeration Logic</h4>
+                            <p style="color: #cbd5e1; line-height: 1.5;">"Flow Throttling" is a proven demand-side management tool. Reducing flow by 20% can yield a 35% reduction in total consumption in high-density environments.</p>
                         </div>
-                        <div style="font-size: 0.65em;">
-                            <h4 style="color: var(--primary-cyan); margin-bottom: 10px;">4. Data Visualization</h4>
-                            <p style="color: #94a3b8; line-height: 1.4;">Glassmorphism and real-time Time-Series charts provide higher psychological impact, encouraging responsible consumption habits.</p>
+                        <div style="font-size: 0.65em; background: rgba(255,255,255,0.02); padding: 15px; border-radius: 10px;">
+                            <h4 style="color: var(--primary-cyan); margin-bottom: 8px; font-size: 1.2em;">4. User Psychology</h4>
+                            <p style="color: #cbd5e1; line-height: 1.5;">Glassmorphism and real-time visualization provide higher psychological impact than static bills, effectively bridging the gap between telemetry and behavior.</p>
                         </div>
                     </div>
+                </div>
+            </section>
+
+            <!-- Literature Review 2: Investigation & Related Work -->
+            <section>
+                <h2>Investigation & Related Work</h2>
+                <div class="glass-card" style="text-align: left; padding: 30px; max-width: 1200px; margin: 0 auto;">
+                    <table style="width: 100%; border-collapse: collapse; font-size: 0.6em; color: #cbd5e1;">
+                        <thead>
+                            <tr style="border-bottom: 2px solid var(--primary-cyan); background: rgba(0, 240, 255, 0.05);">
+                                <th style="padding: 15px; color: var(--primary-cyan);">Feature</th>
+                                <th style="padding: 15px;">Traditional Smart Meters</th>
+                                <th style="padding: 15px;">Hobbyist IoT (Blynk/DIY)</th>
+                                <th style="padding: 15px; color: var(--primary-cyan); background: rgba(0, 240, 255, 0.1);">AquaSense (Proposed)</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr style="border-bottom: 1px solid rgba(255,255,255,0.1);">
+                                <td style="padding: 15px; font-weight: bold; color: var(--primary-cyan);">Granularity</td>
+                                <td style="padding: 15px;">Building-wide total only</td>
+                                <td style="padding: 15px;">Single node monitoring</td>
+                                <td style="padding: 15px; background: rgba(0, 240, 255, 0.05);">Multi-node area-wise profiling</td>
+                            </tr>
+                            <tr style="border-bottom: 1px solid rgba(255,255,255,0.1);">
+                                <td style="padding: 15px; font-weight: bold; color: var(--primary-cyan);">Logic</td>
+                                <td style="padding: 15px;">Static / Billing only</td>
+                                <td style="padding: 15px;">Basic triggers (drag-and-drop)</td>
+                                <td style="padding: 15px; background: rgba(0, 240, 255, 0.05);">Custom "Adaptive Scaling" algorithms</td>
+                            </tr>
+                            <tr style="border-bottom: 1px solid rgba(255,255,255,0.1);">
+                                <td style="padding: 15px; font-weight: bold; color: var(--primary-cyan);">Response</td>
+                                <td style="padding: 15px;">Reactive (Post-facto)</td>
+                                <td style="padding: 15px;">Manual / Alert only</td>
+                                <td style="padding: 15px; background: rgba(0, 240, 255, 0.05);">Autonomous valve actuation</td>
+                            </tr>
+                            <tr>
+                                <td style="padding: 15px; font-weight: bold; color: var(--primary-cyan);">Testing</td>
+                                <td style="padding: 15px;">On-site physical only</td>
+                                <td style="padding: 15px;">Limited to hardware prototype</td>
+                                <td style="padding: 15px; background: rgba(0, 240, 255, 0.05);">Digital Twin stress-simulation</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <p style="font-size: 0.7em; color: var(--primary-cyan); margin-top: 20px; font-style: italic;">Conclusion: AquaSense closes the "Visibility Gap" and "Feedback Loop" missing in existing solutions.</p>
                 </div>
             </section>
 
